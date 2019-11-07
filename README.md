@@ -1,5 +1,5 @@
 # UMass 326 Final Project
-## Team DROP TABLES
+## Team Databaes
 
 ### Team Members:
 
