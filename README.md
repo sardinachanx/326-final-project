@@ -9,8 +9,14 @@
 
 ### Project Overview
 
-%TODO%
+Personal homework tracking that integrates with course planning:
+
+* Keep track of your homework and the time and effort you put into it
+* Compare with other students in your classes
+* Plan scheduling for upcoming semesters based on the effort other students needed to put in
 
 ### Extra Requirements Fulfilled
 
-%TODO%
+ * Authentication, password hashing (accounts)
+ * Data Storage (database for storing everything)
+ * Server-side
