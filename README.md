@@ -1,4 +1,4 @@
-# UMass 326 FInal Project
+# UMass 326 Final Project
 ## Team DROP TABLES
 
 ### Team Members:
