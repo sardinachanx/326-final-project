@@ -1,7 +1,0 @@
-[package]
-name = "databaes-backend"
-version = "0.1.0"
-authors = ["G. Taylor <gmtaylor@umass.edu>", "Serena Chan <tszkeiserena@umass.edu>", "Chris Gomez <cdgomez@umass.edu>"]
-edition = "2018"
-
-[dependencies]
