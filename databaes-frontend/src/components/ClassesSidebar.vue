@@ -11,7 +11,7 @@
         >
         <div
           @click="$emit('selectClass', classType.id)"
-          style="display: inline">
+          style="display: inline; cursor: pointer;">
           {{ classType.name }}
         </div>
         <ul class="assignments">
