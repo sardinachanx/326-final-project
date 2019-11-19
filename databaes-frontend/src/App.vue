@@ -1,8 +1,6 @@
 <template>
   <div id="app">
     <header>
-      <div style="display: inline-block"> Databaes </div>
-      <div id="filler"></div>
       <nav>
         <router-link to="/">Home</router-link> |
         <router-link to="/homeworkplanner">Homework Planner</router-link> |
@@ -284,7 +282,7 @@ nav a.router-link-exact-active {
 }
 
 #sidebar {
-  position: fixed;
+  position: absolute;
   top: 60px;
   bottom: 0px;
   left: 0px;
