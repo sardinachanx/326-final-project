@@ -59,4 +59,8 @@ export default {
 ul {
   text-align: left;
 }
+
+.planner {
+  max-width: 500px;
+}
 </style>

@@ -11,9 +11,14 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/About.vue')
+    path: '/profile',
+    name: 'profile',
+    component: () => import('../views/Profile.vue')
+  },
+  {
+    path: '/classes',
+    name: 'classes',
+    component: () => import('../views/Classes.vue')
   },
   {
     path: '/homeworkplanner',
