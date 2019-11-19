@@ -9,7 +9,7 @@
         <router-link to="/profile">Profile</router-link>
       </nav>
     </header>
-    <router-view id="body" :classes="classes"/>
+    <router-view id="body" :classes="currentUser.classes" :user="currentUser"/>
   </div>
 </template>
 
@@ -18,12 +18,16 @@ export default {
   name: 'app',
   data: function () {
     return {
-      classes: []
+      currentUser: {}
     }
   },
   mounted: function () {
     // TODO: load data from backend
-    this.classes = [
+    this.currentUser = {
+      username: 'Test User',
+      email: 'testuser@example.com'
+    }
+    this.currentUser.classes = [
       {
         name: 'COMPSCI 250',
         assignments: [
@@ -77,150 +81,6 @@ export default {
           }
         ],
         id: 1
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 2
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 3
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 4
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 5
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 6
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 7
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 8
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 9
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 10
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 11
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 12
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 13
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 14
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 15
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 16
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 17
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 18
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 19
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 20
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 21
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 22
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 23
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 24
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-        ],
-        id: 25
       }
     ]
   }

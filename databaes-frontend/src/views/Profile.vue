@@ -1,19 +1,35 @@
 <template>
   <div class="profile">
     <h1>Profile</h1>
+    <form>
+      <p>
+        Username: {{user.username}}
+      </p>
+      <p>
+        Email: {{user.email}}
+      </p>
+    </form>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'home',
+  name: 'profile',
   components: {
+  },
+  props: {
+    user: Object
   }
 }
 </script>
 
 <style scoped>
-.home {
+.profile {
+  text-align: left;
+  max-width: 600px;
+}
+
+h1 {
   text-align: center;
 }
 </style>
