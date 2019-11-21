@@ -10,79 +10,38 @@
       </nav>
     </header>
     <router-view id="body" :classes="currentUser.classes" :user="currentUser"/>
+    <div id="toast" v-if="errorLoading != null">
+      Oops! Something went wrong.
+      <br />
+      &#x26a0; {{ errorLoading }}
+    </div>
   </div>
 </template>
 
 <script>
+import * as api from '@/api.js'
+
 export default {
   name: 'app',
   data: function () {
     return {
-      currentUser: {}
+      currentUserId: 0,
+      currentUser: {},
+      errorLoading: null
+    }
+  },
+  methods: {
+    showError: function (error) {
+      this.errorLoading = error
     }
   },
   mounted: function () {
     // TODO: load data from backend
-    this.currentUser = {
-      username: 'Test User',
-      email: 'testuser@example.com'
-    }
-    this.currentUser.classes = [
-      {
-        name: 'COMPSCI 250',
-        assignments: [
-          {
-            name: 'Problem Set 1',
-            totalTime: 16,
-            averageTime: 2,
-            id: 0
-          },
-          {
-            name: 'Problem Set 2',
-            totalTime: 14,
-            averageTime: 3,
-            id: 1
-          },
-          {
-            name: 'Midterm 1',
-            totalTime: 30,
-            averageTime: 15.5,
-            id: 2
-          }
-        ],
-        id: 0
-      },
-      {
-        name: 'MATH 235',
-        assignments: [
-          {
-            name: 'MyMathLab HW 1',
-            totalTime: 2,
-            averageTime: 2,
-            id: 0
-          },
-          {
-            name: 'MyMathLab HW 2',
-            totalTime: 3,
-            averageTime: 3,
-            id: 1
-          },
-          {
-            name: 'Midterm 1',
-            totalTime: 5,
-            averageTime: 2.5,
-            id: 2
-          },
-          {
-            name: 'Midterm 2',
-            totalTime: 6,
-            averageTime: 1.5,
-            id: 3
-          }
-        ],
-        id: 1
-      }
-    ]
+
+    api.getStudent(this.currentUserId).then((student) => {
+      this.currentUser = student
+      // return api.getCourses()
+    }).catch(this.showError)
   }
 }
 </script>
@@ -90,6 +49,22 @@ export default {
 <style>
 body {
   margin: 0;
+}
+
+#toast {
+  position: fixed;
+  bottom: 20px;
+  text-align: center;
+  min-height: 60px;
+  padding: 30px;
+  max-width: 250px;
+  min-width: 250px;
+  margin-left: -155px;
+  border-radius: 3px;
+  left: 50%;
+  background: #FF0000FF;
+  color: white;
+  font-size: 1.3em;
 }
 
 #app {
