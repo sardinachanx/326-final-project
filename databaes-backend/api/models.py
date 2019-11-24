@@ -20,7 +20,7 @@ class Assignment(models.Model):
     due_date = models.DateField()
     type = models.CharField(max_length=2, choices=ASSIGNMENT_TYPES, default='PS')
     number = models.PositiveSmallIntegerField(default=0)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='assignments')
 
 class Enrollment(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
@@ -40,16 +40,16 @@ class Course(models.Model):
 
 class User(AbstractUser):
     name = models.CharField(blank=True, max_length=255)
-    first_name = models.CharField(blank=True, null=True)
-    last_name = models.CharField(blank=True, null=True)
-    email = models.EmailField(_('email_address'), unique=True)
+    first_name = models.CharField(blank=True, null=True, max_length=255)
+    last_name = models.CharField(blank=True, null=True, max_length=255)
+    email = models.EmailField(_('email'), unique=True)
 
-    REQUIRED_FIELDS = ['username', 'email_address']
+    REQUIRED_FIELDS = ['username']
     USERNAME_FIELD = 'email'
 
 class DayEntry(models.Model):
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
-    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    student = models.ForeignKey('Student', on_delete=models.CASCADE, related_name='day_entries')
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='day_entries')
     date = models.DateField()
     duration = models.DurationField()
 
