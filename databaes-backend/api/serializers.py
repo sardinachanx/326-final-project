@@ -2,22 +2,14 @@ from rest_framework import serializers
 from .models import Course, Assignment, User, Enrollment, DayEntry, Student
 
 
-class CourseSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Course
-        depth = 2
-        fields = ['name', 'subject', 'course_number', 'assignments']
-
-
 class EnrollmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
         fields = ['student', 'course', 'term', 'year']
         extra_kwargs = {
-            'student': {'write_only': True}, 
-            'course': {'write_only': True}, 
-            'term': {'write_only': True}, 
+            'student': {'write_only': True},
+            'course': {'write_only': True},
+            'term': {'write_only': True},
             'year': {'write_only': True}
         }
 
@@ -49,6 +41,15 @@ class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = ['assigned_date', 'due_date', 'course', 'type', 'number']
+
+
+class CourseSerializer(serializers.ModelSerializer):
+    assignments = AssignmentSerializer(many=True, read_only=True)
+    class Meta:
+        model = Course
+        # depth = 2
+        fields = ['name', 'subject', 'course_number', 'assignments']
+
 
 
 class DayEntrySerializer(serializers.ModelSerializer):
