@@ -3,7 +3,7 @@ from .models import Course, Assignment, User, Enrollment, DayEntry, Student
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    # assignments = ??? name + url
+    
     class Meta:
         model = Course
         depth = 2
@@ -23,7 +23,10 @@ class EnrollmentSerializer(serializers.ModelSerializer):
 
 
 class StudentSerializer(serializers.ModelSerializer):
-    courses = CourseSerializer(source='enrollment', many=True, read_only=True)
+    courses = serializers.StringRelatedField(
+        many=True,
+        read_only=True
+    )
 
     class Meta:
         model = Student
@@ -35,10 +38,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['url', 'email', 'name', 'password', 'profile']
+        fields = ['url', 'email', 'name', 'username', 'password', 'profile']
         extra_kwargs = {
             'password': {'write_only': True}
         }
+        read_only_fields = ['profile']
 
 
 class AssignmentSerializer(serializers.ModelSerializer):

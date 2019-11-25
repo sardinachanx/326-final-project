@@ -2,10 +2,13 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
 TERMS = [('F', 'Fall'), ('S', 'Spring')]
+
 
 class Assignment(models.Model):
     ASSIGNMENT_TYPES = (
@@ -18,9 +21,12 @@ class Assignment(models.Model):
     )
     assigned_date = models.DateField()
     due_date = models.DateField()
-    type = models.CharField(max_length=2, choices=ASSIGNMENT_TYPES, default='PS')
+    type = models.CharField(
+        max_length=2, choices=ASSIGNMENT_TYPES, default='PS')
     number = models.PositiveSmallIntegerField(default=0)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='assignments')
+    course = models.ForeignKey(
+        'Course', on_delete=models.CASCADE, related_name='assignments')
+
 
 class Enrollment(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
@@ -28,15 +34,24 @@ class Enrollment(models.Model):
     term = models.CharField(max_length=1, choices=TERMS)
     year = models.IntegerField()
 
+
 class Student(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    def __str__(self):
+        return self.user.__str__()
+
 
 class Course(models.Model):
     subject = models.CharField(max_length=7)
     course_number = models.CharField(max_length=5)
     name = models.CharField(max_length=100)
-    student = models.ManyToManyField(to=Student, through=Enrollment, related_name='courses')
+    student = models.ManyToManyField(
+        to=Student, through=Enrollment, related_name='courses')
    #  professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.subject + ' ' + self.course_number + ': ' + self.name
+
 
 class User(AbstractUser):
     name = models.CharField(blank=True, max_length=255)
@@ -46,10 +61,21 @@ class User(AbstractUser):
 
     REQUIRED_FIELDS = ['username']
     USERNAME_FIELD = 'email'
+    def __str__(self):
+        return "%s (%s)" % (self.username, self.email)
+
 
 class DayEntry(models.Model):
-    student = models.ForeignKey('Student', on_delete=models.CASCADE, related_name='day_entries')
-    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='day_entries')
+    student = models.ForeignKey(
+        'Student', on_delete=models.CASCADE, related_name='day_entries')
+    assignment = models.ForeignKey(
+        Assignment, on_delete=models.CASCADE, related_name='day_entries')
     date = models.DateField()
     duration = models.DurationField()
 
+
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Student.objects.create(user=instance)
+    instance.profile.save()
