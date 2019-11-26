@@ -19,6 +19,7 @@ class Assignment(models.Model):
         ('ES', 'Essay'),
         ('PJ', 'Project')
     )
+    ASSIGNMENT_TO_STR = dict(ASSIGNMENT_TYPES)
     assigned_date = models.DateField()
     due_date = models.DateField()
     type = models.CharField(
@@ -26,6 +27,9 @@ class Assignment(models.Model):
     number = models.PositiveSmallIntegerField(default=0)
     course = models.ForeignKey(
         'Course', on_delete=models.CASCADE, related_name='assignments')
+    
+    def __str__(self):
+        return '%s, %s %s' % (self.course.__str__(), self.ASSIGNMENT_TO_STR[self.type], self.number)
 
 
 class Enrollment(models.Model):
@@ -51,6 +55,9 @@ class Course(models.Model):
    #  professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     def __str__(self):
         return self.subject + ' ' + self.course_number + ': ' + self.name
+
+    def get_course_id(self):
+        return "%s %s" % (self.subject, self.course_number)
 
 
 class User(AbstractUser):

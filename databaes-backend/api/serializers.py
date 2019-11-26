@@ -13,20 +13,30 @@ class EnrollmentSerializer(serializers.ModelSerializer):
             'year': {'write_only': True}
         }
 
+class DayEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DayEntry
+        fields = ['student', 'assignment', 'date', 'duration']
+        extra_kwargs = {'student': {'write_only': True}}
+
 
 class StudentSerializer(serializers.ModelSerializer):
     courses = serializers.StringRelatedField(
         many=True,
         read_only=True
     )
+    day_entries = DayEntrySerializer(
+        many=True,
+        read_only=True
+    )
 
     class Meta:
         model = Student
-        fields = ['courses']
+        fields = ['courses', 'day_entries']
 
 
 class UserSerializer(serializers.ModelSerializer):
-    profile = StudentSerializer(required=True)
+    profile = StudentSerializer(required=False, read_only=True)
 
     class Meta:
         model = User
@@ -34,7 +44,6 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
-        read_only_fields = ['profile']
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -50,10 +59,6 @@ class CourseSerializer(serializers.ModelSerializer):
         # depth = 2
         fields = ['name', 'subject', 'course_number', 'assignments']
 
+class TokenSerializer(serializers.Serializer):
+    token = serializers.CharField(max_length=255)
 
-
-class DayEntrySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DayEntry
-        fields = ['student', 'assignment', 'date', 'duration']
-        extra_kwargs = {'student': {'write_only': True}}

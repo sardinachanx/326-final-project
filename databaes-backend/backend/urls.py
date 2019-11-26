@@ -29,5 +29,6 @@ router.register(r'enrollment', views.EnrollmentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include(router.urls))
+    path('api/v1/', include(router.urls)),
+    path('auth/login/', views.LoginView.as_view(), name='auth-login')
 ]
