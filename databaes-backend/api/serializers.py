@@ -3,21 +3,37 @@ from .models import Course, Assignment, User, Enrollment, DayEntry, Student
 
 
 class EnrollmentSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        required=False,
+        read_only=True,
+        default=serializers.CurrentUserDefault
+    )
     class Meta:
         model = Enrollment
-        fields = ['student', 'course', 'term', 'year']
-        extra_kwargs = {
-            'student': {'write_only': True},
-            'course': {'write_only': True},
-            'term': {'write_only': True},
-            'year': {'write_only': True}
-        }
+        fields = ['user', 'course', 'term', 'year']
+        # extra_kwargs = {
+        #     'course': {'write_only': True},
+        #     'term': {'write_only': True},
+        #     'year': {'write_only': True}
+        # }
+
+    def create(self, validated_data):
+        if 'user' not in validated_data:
+            validated_data['user'] = self.context['request'].user
 
 class DayEntrySerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        required=False,
+        read_only=True,
+        default=serializers.CurrentUserDefault
+    )
     class Meta:
         model = DayEntry
-        fields = ['student', 'assignment', 'date', 'duration']
-        extra_kwargs = {'student': {'write_only': True}}
+        fields = ['user', 'assignment', 'date', 'duration']
+    
+    def create(self, validated_data):
+        if 'user' not in validated_data:
+            validated_data['user'] = self.context['request'].user
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -57,7 +73,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         # depth = 2
-        fields = ['name', 'subject', 'course_number', 'assignments']
+        fields = ['url', 'name', 'id', 'subject', 'course_number', 'assignments']
 
 class TokenSerializer(serializers.Serializer):
     token = serializers.CharField(max_length=255)

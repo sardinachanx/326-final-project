@@ -32,6 +32,6 @@ router.register(r'enrollment', views.EnrollmentViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
-    path('api/token/', TokenObtainPairView.as_view(), name='token-login'),
+    path('api/login/', TokenObtainPairView.as_view(), name='token-login'),
     path('api/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
 ]

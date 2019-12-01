@@ -2,8 +2,10 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
+from rest_framework.serializers import HiddenField, CurrentUserDefault
 
 from .models import Assignment, Course, DayEntry, Enrollment, User
+from .permissions import IsProfileOwner
 from .serializers import (AssignmentSerializer, CourseSerializer,
                           DayEntrySerializer, EnrollmentSerializer,
                           TokenSerializer, UserSerializer)
@@ -25,12 +27,28 @@ class DayEntryViewSet(viewsets.ModelViewSet):
     queryset = DayEntry.objects.all()
     serializer_class = DayEntrySerializer
 
-
 class EnrollmentViewSet(viewsets.ModelViewSet):
     queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
 
+    def get_permissions(self):
+        permission_classes = []
+        if self.action == 'create' or self.action == 'retrieve' or self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
+            permission_classes = [IsProfileOwner]
+        elif self.action == 'list':
+            permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def get_permissions(self):
+        permission_classes = []
+        if self.action == 'create': 
+            permission_classes = [permissions.AllowAny]
+        elif self.action == 'retrieve' or self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
+            permission_classes = [IsProfileOwner]
+        elif self.action == 'list': 
+            permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]

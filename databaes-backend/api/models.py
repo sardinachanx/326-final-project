@@ -33,7 +33,7 @@ class Assignment(models.Model):
 
 
 class Enrollment(models.Model):
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
     term = models.CharField(max_length=1, choices=TERMS)
     year = models.IntegerField()
@@ -51,7 +51,7 @@ class Course(models.Model):
     course_number = models.CharField(max_length=5)
     name = models.CharField(max_length=100)
     student = models.ManyToManyField(
-        to=Student, through=Enrollment, related_name='courses')
+        to='User', through=Enrollment, related_name='courses')
    #  professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
     def __str__(self):
         return self.subject + ' ' + self.course_number + ': ' + self.name
@@ -73,8 +73,8 @@ class User(AbstractUser):
 
 
 class DayEntry(models.Model):
-    student = models.ForeignKey(
-        'Student', on_delete=models.CASCADE, related_name='day_entries')
+    user = models.ForeignKey(
+        'User', on_delete=models.CASCADE, related_name='day_entries')
     assignment = models.ForeignKey(
         Assignment, on_delete=models.CASCADE, related_name='day_entries')
     date = models.DateField()
