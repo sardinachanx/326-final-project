@@ -1,7 +1,7 @@
 <template>
-  <div class="profile">
-    <h1>Profile</h1>
-    <form v-if="user != null">
+  <div class="login">
+    <h1>Login</h1>
+    <form>
       <p>
         Username: {{user.username}}
       </p>
@@ -24,7 +24,7 @@ export default {
 </script>
 
 <style scoped>
-.profile {
+.login {
   text-align: left;
   max-width: 600px;
 }
