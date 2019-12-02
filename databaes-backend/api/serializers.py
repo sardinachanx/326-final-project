@@ -8,6 +8,7 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         read_only=True,
         default=serializers.CurrentUserDefault
     )
+
     class Meta:
         model = Enrollment
         fields = ['user', 'course', 'term', 'year']
@@ -21,16 +22,18 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         if 'user' not in validated_data:
             validated_data['user'] = self.context['request'].user
 
+
 class DayEntrySerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         required=False,
         read_only=True,
         default=serializers.CurrentUserDefault
     )
+
     class Meta:
         model = DayEntry
         fields = ['user', 'assignment', 'date', 'duration']
-    
+
     def create(self, validated_data):
         if 'user' not in validated_data:
             validated_data['user'] = self.context['request'].user
@@ -70,11 +73,13 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     assignments = AssignmentSerializer(many=True, read_only=True)
+
     class Meta:
         model = Course
         # depth = 2
-        fields = ['url', 'name', 'id', 'subject', 'course_number', 'assignments']
+        fields = ['url', 'name', 'id', 'subject',
+                  'course_number', 'assignments']
+
 
 class TokenSerializer(serializers.Serializer):
     token = serializers.CharField(max_length=255)
-
