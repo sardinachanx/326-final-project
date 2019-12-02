@@ -19,6 +19,24 @@ export default {
   },
   props: {
     user: Object
+  },
+  methods: {
+    login: function (username, password, rememberMe) {
+      let redirect = this.$auth.redirect()
+
+      this.$auth.login({
+        data: {
+          username: username,
+          password: password
+        },
+        rememberMe: rememberMe,
+        redirect: {
+          name: redirect ? redirect.from.name : 'profile'
+        }
+      }).then(() => {}, (res) => {
+        this.$emit('showError', res.data)
+      })
+    }
   }
 }
 </script>

@@ -17,7 +17,7 @@
           </div>
         </nav>
       </header>
-      <router-view id="body" :classes="loggedIn ? currentUser.classes : null" :user="currentUser"/>
+      <router-view id="body" :classes="loggedIn ? currentUser.classes : null" :user="currentUser" v-on:showError="showError"/>
       <div id="toast" v-if="errorLoading != null || !$auth.ready()">
         Oops! Something went wrong.
         <br />
