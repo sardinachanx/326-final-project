@@ -83,7 +83,7 @@ class BaseTestCase(APITestCase):
 
 
 # Test permission access of different API endpoints.
-class PermissionsTest(BaseTestCaes):
+class PermissionsTest(BaseTestCase):
     pass
 
 # Test save/load of information. 
