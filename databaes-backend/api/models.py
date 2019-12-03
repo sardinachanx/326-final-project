@@ -5,10 +5,9 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from .constants import COURSE_SUBJECTS
+
 # Create your models here.
-
-TERMS = [('F', 'Fall'), ('S', 'Spring')]
-
 
 # A model denoting an assignment. Assignments must be associated with
 # a single course, and have a start and end date (for display
@@ -40,6 +39,7 @@ class Assignment(models.Model):
 # a student and course can be connected (aka "enroll" a student).
 # This database is write-only, unless admin needs to debug.
 class Enrollment(models.Model):
+    TERMS = [('F', 'Fall'), ('S', 'Spring')]
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
     term = models.CharField(max_length=1, choices=TERMS)
@@ -60,7 +60,7 @@ class Student(models.Model):
 # Model denoting required information for a course. Maintains a list
 # of students enrolled, but this should not be accessible.
 class Course(models.Model):
-    subject = models.CharField(max_length=7)
+    subject = models.CharField(max_length=7, choices=COURSE_SUBJECTS, default='')
     course_number = models.CharField(max_length=5)
     name = models.CharField(max_length=100)
     student = models.ManyToManyField(
