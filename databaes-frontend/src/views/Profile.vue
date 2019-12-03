@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <h1>Profile</h1>
-    <form>
+    <form v-if="user != null">
       <p>
         Username: {{user.username}}
       </p>
