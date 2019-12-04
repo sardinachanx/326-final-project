@@ -1,48 +1,43 @@
 <template>
-  <div>
-    <div id="app">
-      <header>
-        <a style="display: inline; margin: 0; color: inherit" href="/">Databaes</a>
-        <nav>
-          <div class="mainnav" v-if="loggedIn">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/homeworkplanner">Homework Planner</router-link> |
-            <router-link to="/classes">Classes</router-link> |
-            <router-link to="/search">Search</router-link> |
-            <router-link to="/profile">Profile</router-link>
-          </div>
-          <div class="loginnav">
-            <router-link to="/login" v-if="!loggedIn">Login</router-link> |
-            <router-link to="/register" v-if="!loggedIn">Register</router-link>
-            <a href="" v-on:click.stop.prevent="logout" v-if="loggedIn">Logout</a>
-          </div>
-        </nav>
-      </header>
-      <router-view id="body" :classes="loggedIn ? currentUser.classes : null" :user="currentUser" v-on:showError="showError"/>
-      <div id="toast" v-if="errorLoading != null || !$auth.ready()">
-        Oops! Something went wrong.
-        <br />
-        <div v-if="errorLoading != null">&#x26a0; {{ errorLoading }}</div>
-        <div v-if="errorLoading == null">&#x26a0; Couldn't connect <br /> to the server </div>
-      </div>
+  <div id="app">
+    <header>
+      <a style="display: inline; margin: 0; color: inherit" href="/">Databaes</a>
+      <nav>
+        <div class="mainnav" v-if="loggedIn">
+          <router-link to="/">Home</router-link> |
+          <router-link to="/homeworkplanner">Homework Planner</router-link> |
+          <router-link to="/classes">Classes</router-link> |
+          <router-link to="/search">Search</router-link> |
+          <router-link to="/profile">Profile</router-link>
+        </div>
+        <div class="loginnav">
+          <router-link to="/login" v-if="!loggedIn">Login</router-link> |
+          <router-link to="/register" v-if="!loggedIn">Register</router-link>
+          <a href="" v-on:click.stop.prevent="logout" v-if="loggedIn">Logout</a>
+        </div>
+      </nav>
+    </header>
+    <router-view id="body" v-on:showError="showError"/>
+    <div id="toast" v-if="errorLoading != null">
+      Oops! Something went wrong.
+      <br />
+      <div v-if="errorLoading != null">&#x26a0; {{ errorLoading }}</div>
+      <div v-if="errorLoading == null">&#x26a0; Couldn't connect <br /> to the server </div>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'app',
   data: function () {
     return {
-      currentUserId: 0,
-      currentUser: null,
       errorLoading: null
     }
   },
   computed: {
     loggedIn: function () {
-      return this.currentUser !== null
+      return this.$store.access !== null
     }
   },
   methods: {
@@ -51,55 +46,10 @@ export default {
     },
     logout: function () {
       // TODO: actually logout
-      this.currentUser = null
-    },
-    // POST enrollment/student=[student_id]
-    //                 &course=[course_id]
-    //                 &term=(fall|spring)
-    //                 &year=[year_int]
-    enrollStudent: async function (studentId, courseId, term, year) {
-      const response = await this.$http({
-        url: `enrollment/student=${studentId}&course=${courseId}&term=${term}&year=${year}`,
-        method: 'POST'
-      })
-      return response
-    },
-    // GET student/<student_id>
-    getStudent: async function (studentId) {
-      const response = await this.$http({
-        url: `student/${studentId}`,
-        method: 'GET'
-      })
-      return response
     }
-
   },
   mounted: function () {
     // TODO: load data from backend
-
-    /* this.currentUser = {
-      email: 'test@test.com',
-      username: 'blah',
-      classes: [{
-        name: 'Blah',
-        id: 0,
-        assignments: [
-          {
-            name: 'Assignment one',
-            totalTime: 2,
-            averageTime: 1,
-            id: 0
-          }
-        ]
-      }]
-    } */
-
-    if (this.loggedIn) {
-      this.getStudent(this.currentUserId).then((student) => {
-        this.currentUser = student
-        // return this.getCourses()
-      }).catch(this.showError)
-    }
   }
 }
 </script>
@@ -110,7 +60,6 @@ body {
 }
 
 #toast {
-  /*display: none;*/
   position: fixed;
   bottom: 20px;
   text-align: center;

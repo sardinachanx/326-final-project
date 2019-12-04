@@ -1,10 +1,18 @@
 <template>
   <div class="register">
     <h1>Register</h1>
-    <form v-on:submit.prevent="register()">
+    <form v-on:submit.prevent="register">
       <fieldset>
         <label for="username">Username:</label>
         <input type="text" v-model="username" id="username"/>
+      </fieldset>
+      <fieldset>
+        <label for="email">Email:</label>
+        <input type="text" v-model="email" id="email"/>
+      </fieldset>
+      <fieldset>
+        <label for="name">Name:</label>
+        <input type="text" v-model="name" id="name"/>
       </fieldset>
       <fieldset>
         <label for="password">Password:</label>
@@ -33,23 +41,26 @@ export default {
       username: '',
       password: '',
       passwordAgain: '',
+      email: '',
+      name: '',
       rememberMe: true
     }
   },
-  props: {
-    user: Object
-  },
   methods: {
-    register: function (username, password, rememberMe) {
+    register: function () {
       let redirect = this.$auth.redirect()
+
+      // TODO: data verification
 
       this.$auth.register({
         data: {
-          username: username,
-          password: password
+          username: this.username,
+          password: this.password,
+          email: this.email,
+          name: this.name
         },
         autoLogin: true,
-        rememberMe: rememberMe,
+        rememberMe: this.rememberMe,
         redirect: {
           name: redirect ? redirect.from.name : 'profile'
         }
