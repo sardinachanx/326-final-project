@@ -3,8 +3,8 @@
     <h1>Login</h1>
     <form v-on:submit.prevent="login()">
       <fieldset>
-        <label for="username">Username:</label>
-        <input type="text" v-model="username" id="username"/>
+        <label for="email">Email:</label>
+        <input type="text" v-model="email" id="email"/>
       </fieldset>
       <fieldset>
         <label for="password">Password:</label>
@@ -26,31 +26,17 @@ export default {
   },
   data: function () {
     return {
-      username: '',
+      email: '',
       password: '',
       rememberMe: true
     }
   },
-  props: {
-    user: Object
-  },
   methods: {
-    login: function (username, password, rememberMe) {
-      let redirect = this.$auth.redirect()
-
-      this.$auth.login({
-        data: {
-          username: username,
-          password: password
-        },
-        rememberMe: rememberMe,
-        redirect: {
-          name: redirect ? redirect.from.name : 'profile'
-        }
-      }).then(() => {
-
-      }, (res) => {
-        this.$emit('showError', res.data)
+    login: function () {
+      console.log('here')
+      this.$store.dispatch('obtainToken', {
+        email: this.email,
+        password: this.password
       })
     }
   }

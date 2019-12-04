@@ -1,12 +1,9 @@
 <template>
   <div class="profile">
     <h1>Profile</h1>
-    <form v-if="user != null">
+    <form v-if="true">
       <p>
-        Username: {{user.username}}
-      </p>
-      <p>
-        Email: {{user.email}}
+        Username: {{ $auth.user() }}
       </p>
     </form>
   </div>
