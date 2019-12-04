@@ -23,10 +23,10 @@ pip install -r requirements.txt
 
 4. Create new database and user, and grant all database privileges to user
 
-5. Create environment variables (Windows) or add the following to `.bash_profile`:
-- DB_NAME: Name of database created in Step 4
-- DB_USER: Username of new user created in Step 4 (with database privileges)
-- DB_PASS: Password of new user created in Step 4 (with database privileges) 
+5. Create environment variables (Windows) or add the following to your `.bash_profile` or `.bashrc` (Unix):
+- `DB_NAME`: Name of database created in Step 4
+- `DB_USER`: Username of new user created in Step 4 (with database privileges)
+- `DB_PASS`: Password of new user created in Step 4 (with database privileges) 
 
 6. Run initial migration and launch server
 ```
