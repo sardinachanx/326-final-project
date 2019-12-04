@@ -65,6 +65,12 @@ class UserViewSet(viewsets.ModelViewSet):
         elif self.action == 'list':
             permission_classes = [permissions.IsAdminUser]
         return [permission() for permission in permission_classes]
+    
+    def get_object(self):
+        if self.kwargs['pk'] == 'me':
+            return self.request.user
+        else:
+            return super().get_object()
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
