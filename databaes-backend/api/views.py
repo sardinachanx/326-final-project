@@ -67,7 +67,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
     
     def get_object(self):
-        if self.kwargs['pk'] == 'me':
+        if self.request.user.is_authenticated and self.kwargs['pk'] == 'me':
             return self.request.user
         else:
             return super().get_object()
