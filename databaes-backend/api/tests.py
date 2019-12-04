@@ -1,3 +1,4 @@
+from datetime import timedelta
 from random import randint, sample
 
 from django.urls import reverse
@@ -7,6 +8,7 @@ from rest_framework.test import APIClient, APITestCase
 from .models import Assignment, Course, DayEntry, Enrollment, User
 
 # TODO: Unit tests! This framework works for functionality only...
+
 
 # Setup for tests
 
@@ -18,7 +20,7 @@ from .models import Assignment, Course, DayEntry, Enrollment, User
 # - num_admins: Number of admins 
 # - num_users: Number of non-admin users
 # - num_courses: Number of unique courses
-class XAdmins_YUsers_ZCourses_PAssignments_RDayEntries(APITestCase):
+class BaseTestCase(APITestCase):
     def __init__(self, *args, **kwargs):
         self._dev_test_client = APIClient()
         self._num_admins = kwargs.pop('num_admins')
@@ -41,6 +43,12 @@ class XAdmins_YUsers_ZCourses_PAssignments_RDayEntries(APITestCase):
     def enroll_student(student, course, term, year):
         Enrollment.objects.create(user=student, course=course, term=term, year=year)
 
+    @staticmethod 
+    def add_assignment(course, assignment_id):
+        # TODO: implement method 
+        pass  
+
+
     # Generates database setup with specified number of entries.
     # Assumes only one term. #TODO: adopt framework for more. 
     def setup(self):
@@ -57,24 +65,30 @@ class XAdmins_YUsers_ZCourses_PAssignments_RDayEntries(APITestCase):
 
         for i in range(self._num_courses):
             course = self.create_course(subject='TEST', course_number=randint(100, 999), name='Test Course ' + i)
+            
             # Generate assignments 
             assignment_count = randint(0, 20)
+            for assignment_id in assignment_count: 
+                # Assume all assignments are problem sets 
+                self.add_assignment(i, assignment_id)
+            
             # Generate enrollment and day entries 
             students_in_course = sample(range(1, total_user_count), randint(0, total_user_count))
             for student in students_in_course:
                 self.enroll_student(student, course, 'F', 2019)
-                
-
-
-        pass 
-
-
+                # TODO: finish method
+                # TODO: generate day entries for students and add them! 
 
 # Unit/Functional tests
 
 
-class PermissionsTest(APITestCase):
+# Test permission access of different API endpoints.
+class PermissionsTest(BaseTestCase):
     pass
+
+# Test save/load of information. 
+class SaveLoadTest(BaseTestCase):
+    pass 
 
 
 # Smoke Tests
