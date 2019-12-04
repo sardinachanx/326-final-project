@@ -6,7 +6,7 @@ from .models import Course, Assignment, Enrollment, DayEntry, Student
 User = get_user_model()
 
 class EnrollmentSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault().profile)
 
     class Meta:
         model = Enrollment
@@ -16,23 +16,23 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         #     'term': {'write_only': True},
         #     'year': {'write_only': True}
         # }
+    
 
 
 class DayEntrySerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault().profile)
 
     class Meta:
         model = DayEntry
         fields = ['assignment', 'date', 'duration', 'user']
 
 
-class StudentSerializer(serializers.ModelSerializer):
-    courses = EnrollmentSerializer(many=True, read_only=True)
-    day_entries = DayEntrySerializer(many=True, read_only=True)
-
+class StudentSerializer(serializers.ModelSerializer): 
+    # courses = EnrollmentSerializer(source="enrollment_set", many=True, read_only=True)
+    # day_entries = DayEntrySerializer(many=True, read_only=True)
     class Meta:
         model = Student
-        fields = ['courses', 'day_entries']
+        fields = []
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -65,9 +65,3 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = ['url', 'name', 'id', 'subject',
                   'course_number', 'assignments']
 
-
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        data['id'] = self.user.pk
-        return data
