@@ -3,13 +3,14 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
-from rest_framework.serializers import HiddenField, CurrentUserDefault
+from rest_framework.serializers import CurrentUserDefault, HiddenField
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import Assignment, Course, DayEntry, Enrollment, User
-from .permissions import IsProfileOwner, IsEnrollmentOwner
+from .permissions import IsEnrollmentOwner, IsProfileOwner
 from .serializers import (AssignmentSerializer, CourseSerializer,
-                          DayEntrySerializer, EnrollmentSerializer,
-                          TokenSerializer, UserSerializer)
+                          CustomTokenObtainPairSerializer, DayEntrySerializer,
+                          EnrollmentSerializer, UserSerializer)
 
 # Create your views here.
 
@@ -37,10 +38,10 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
     # Enroll, unenroll, or update enrollment: User only/Admin
     # View all enrollment: Admin only
     def get_permissions(self):
-        if settings.DEBUG: 
-            return [permissions.AllowAny()]
         permission_classes = []
-        if self.action == 'create' or self.action == 'retrieve' or self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
+        if self.action == 'create':
+            permission_classes = [permissions.IsAuthenticated]
+        elif self.action == 'retrieve' or self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
             permission_classes = [IsEnrollmentOwner]
         elif self.action == 'list':
             permission_classes = [permissions.IsAdminUser]
@@ -56,8 +57,6 @@ class UserViewSet(viewsets.ModelViewSet):
     # List all users: Admin only
     # Create new user (register): Unrestricted
     def get_permissions(self):
-        if settings.DEBUG: 
-            return [permissions.AllowAny()]
         permission_classes = []
         if self.action == 'create':
             permission_classes = [permissions.AllowAny]
@@ -66,3 +65,7 @@ class UserViewSet(viewsets.ModelViewSet):
         elif self.action == 'list':
             permission_classes = [permissions.IsAdminUser]
         return [permission() for permission in permission_classes]
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
