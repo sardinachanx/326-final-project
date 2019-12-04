@@ -1,7 +1,7 @@
 <template>
-  <div class="login">
-    <h1>Login</h1>
-    <form v-on:submit.prevent="login()">
+  <div class="register">
+    <h1>Register</h1>
+    <form v-on:submit.prevent="register()">
       <fieldset>
         <label for="username">Username:</label>
         <input type="text" v-model="username" id="username"/>
@@ -11,23 +11,28 @@
         <input type="password" v-model="password" id="password"/>
       </fieldset>
       <fieldset>
+        <label for="password">Password Again:</label>
+        <input type="password" v-model="passwordAgain" id="passwordAgain"/>
+      </fieldset>
+      <fieldset>
         <input v-model="rememberMe" type="checkbox" id="rememberMe"/>
         <label for="rememberMe">Remember Me</label>
       </fieldset>
-      <button type="submit" id="submit">Login</button>
+      <button type="submit" id="submit">Register</button>
     </form>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'login',
+  name: 'register',
   components: {
   },
   data: function () {
     return {
       username: '',
       password: '',
+      passwordAgain: '',
       rememberMe: true
     }
   },
@@ -35,14 +40,15 @@ export default {
     user: Object
   },
   methods: {
-    login: function (username, password, rememberMe) {
+    register: function (username, password, rememberMe) {
       let redirect = this.$auth.redirect()
 
-      this.$auth.login({
+      this.$auth.register({
         data: {
           username: username,
           password: password
         },
+        autoLogin: true,
         rememberMe: rememberMe,
         redirect: {
           name: redirect ? redirect.from.name : 'profile'
@@ -58,7 +64,7 @@ export default {
 </script>
 
 <style scoped>
-.login {
+.register {
   text-align: left;
   max-width: 600px;
 }
@@ -74,7 +80,6 @@ fieldset {
   margin: 10px;
   display: flex;
   justify-content: space-between;
-  padding-top: 10px;
 }
 
 h1 {
