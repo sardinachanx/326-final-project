@@ -1,13 +1,11 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Course, Assignment, User, Enrollment, DayEntry, Student
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import Course, Assignment, Enrollment, DayEntry, Student
 
+User = get_user_model()
 
 class EnrollmentSerializer(serializers.ModelSerializer):
-    # user = serializers.PrimaryKeyRelatedField(
-    #     required=False,
-    #     read_only=True,
-    #     default=serializers.CurrentUserDefault
-    # )
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
@@ -19,33 +17,16 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         #     'year': {'write_only': True}
         # }
 
-    # def create(self, validated_data):
-    #     if 'user' not in validated_data:
-    #         validated_data['user'] = self.context['request'].user
-
 
 class DayEntrySerializer(serializers.ModelSerializer):
-    # user = serializers.PrimaryKeyRelatedField(
-    #     required=False,
-    #     read_only=True,
-    #     default=serializers.CurrentUserDefault
-    # )
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = DayEntry
         fields = ['assignment', 'date', 'duration', 'user']
 
-    # def create(self, validated_data):
-    #     if 'user' not in validated_data:
-    #         validated_data['user'] = self.context['request'].user
-
 
 class StudentSerializer(serializers.ModelSerializer):
-    # courses = serializers.StringRelatedField(
-    #     many=True,
-    #     read_only=True
-    # )
     courses = EnrollmentSerializer(many=True, read_only=True)
     day_entries = DayEntrySerializer(many=True, read_only=True)
 
@@ -63,6 +44,11 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
+    
+    def create(self,validated_data):
+        user = User.objects.create_user(name=validated_data['name'], email=validated_data['email'],
+            username=validated_data['username'], password=validated_data['password'])
+        return user
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -76,10 +62,12 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        # depth = 2
         fields = ['url', 'name', 'id', 'subject',
                   'course_number', 'assignments']
 
 
-class TokenSerializer(serializers.Serializer):
-    token = serializers.CharField(max_length=255)
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['id'] = self.user.pk
+        return data

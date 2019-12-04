@@ -43,7 +43,7 @@ class Enrollment(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
     term = models.CharField(max_length=1, choices=TERMS)
-    year = models.IntegerField()
+    year = models.PositiveSmallIntegerField()
 
 
 # The "profile" of a student. This is to denote any extra information,

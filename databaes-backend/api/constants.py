@@ -33,7 +33,7 @@ COURSE_SUBJECTS = [
     ("CICS", "College of Inform & Comp Sci"),
     ("COMM", "Communication"),
     ("COMM-DIS", "Communication Disorders"),
-    ("COM-HLTH", "Community Health (see PUBHLTH)"),
+    ("COM-HLTH", "Community Health"),
     ("COMP-LIT", "Comparative Literature"),
     ("COMPSCI", "Computer Science"),
     ("DANCE", "Dance"),
