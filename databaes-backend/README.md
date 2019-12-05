@@ -35,13 +35,13 @@ python manage.py migrate
 python manage.py runserver
 ``` 
 
-7. Navigate to https://localhost:8000/api/v1. You should see a list of all available API endpoints. 
+7. Navigate to http://localhost:8000/api/v1. You should see a list of all available API endpoints. 
 
 To view the admin panel, first create a superuser:
 ``` 
 python manage.py createsuperuser
 ``` 
 
-Now you should be able to log into and view the admin panel at https://localhost:8000/admin after starting the server. 
+Now you should be able to log into and view the admin panel at http://localhost:8000/admin after starting the server. 
 
 ### API Spec
