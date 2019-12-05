@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import Assignment, Course, DayEntry, Enrollment, User
 from .permissions import IsEnrollmentOwner, IsProfileOwner
 from .serializers import (AssignmentSerializer, CourseSerializer, DayEntrySerializer,
-                          EnrollmentSerializer, UserSerializer)
+                          EnrollmentSerializer, StatisticsSerializer, UserSerializer)
 
 # Create your views here.
 
@@ -70,3 +70,9 @@ class UserViewSet(viewsets.ModelViewSet):
             return self.request.user
         else:
             return super().get_object()
+
+
+class StatisticsViewSet(viewsets.ViewSet):
+    serializer_class = StatisticsSerializer
+
+    
