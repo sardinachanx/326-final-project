@@ -75,12 +75,14 @@ class StatisticsSerializer(serializers.Serializer):
     total_minutes_this_week = serializers.SerializerMethodField()
 
     def get_total_minutes_this_week(self, obj):
-        today = date.today()
+        today = obj
         closest_sunday = today - datetime.timedelta(days=today.weekday())
-        relevant_entries = obj.day_entries.filter(date__gte=closest_sunday, date__lte=today)
-        print(relevant_entries)
+        relevant_entries = self.context['request'].user.day_entries.filter(date__gte=closest_sunday, date__lte=today)
+        # print(relevant_entries)
         total_hour_count = timedelta(0)
         for entry in relevant_entries: 
             total_hour_count += entry.duration
         return str(total_hour_count)
+    
+    
 
