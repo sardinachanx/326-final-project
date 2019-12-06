@@ -1,6 +1,6 @@
 # databaes-backend 
 
-## Development setup 
+## Development setup (Mac OS) 
 
 0. Clone the repo and `cd` into `databaes-backend`
 ```
@@ -22,11 +22,16 @@ pip install -r requirements.txt
 3. Install PostgreSQL
 
 4. Create new database and user, and grant all database privileges to user
+```
+CREATE DATABASE <db_name>;
+CREATE USER <db_user> WITH ENCRYPTED PASSWORD <db_pass>;
+GRANT ALL PRIVILEGES ON DATABASE <db_name> TO <db_user> 
+```
 
-5. Create environment variables (Windows) or add the following to your `.bash_profile` or `.bashrc` (Unix):
-- `DB_NAME`: Name of database created in Step 4
-- `DB_USER`: Username of new user created in Step 4 (with database privileges)
-- `DB_PASS`: Password of new user created in Step 4 (with database privileges) 
+5. Add the following to your `.bash_profile` or `.bashrc`:
+- `DB_NAME`: Name of database created in Step 4 (`<db_name>`)
+- `DB_USER`: Username of new user created in Step 4 (`<db_user>`)
+- `DB_PASS`: Password of new user created in Step 4 (`<db_pass>`)
 
 6. Run initial migration and launch server
 ```
