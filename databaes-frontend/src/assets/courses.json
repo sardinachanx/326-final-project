@@ -1,0 +1,782 @@
+[
+  {
+    "value": "ACCOUNTG",
+    "display_name": "Accounting"
+  },
+  {
+    "value": "AEROSPAC",
+    "display_name": "Aerospace Studies"
+  },
+  {
+    "value": "AFROAM",
+    "display_name": "Afro-American Studies"
+  },
+  {
+    "value": "ANIMLSCI",
+    "display_name": "Animal Science"
+  },
+  {
+    "value": "ANTHRO",
+    "display_name": "Anthropology"
+  },
+  {
+    "value": "ARABIC",
+    "display_name": "Arabic"
+  },
+  {
+    "value": "ARCH",
+    "display_name": "Architecture"
+  },
+  {
+    "value": "ARCH-DES",
+    "display_name": "Architecture and Design"
+  },
+  {
+    "value": "ART",
+    "display_name": "Art"
+  },
+  {
+    "value": "ART-ED",
+    "display_name": "Art - Student Teaching"
+  },
+  {
+    "value": "ART-HIST",
+    "display_name": "Art History"
+  },
+  {
+    "value": "ARTS-EXT",
+    "display_name": "Arts Extension"
+  },
+  {
+    "value": "ASIAN-ST",
+    "display_name": "Asian Studies"
+  },
+  {
+    "value": "ASTRON",
+    "display_name": "Astronomy"
+  },
+  {
+    "value": "BDIC",
+    "display_name": "Bachelor's Deg. W/Indiv Conc."
+  },
+  {
+    "value": "BIOCHEM",
+    "display_name": "Biochemistry & Molecular Bio."
+  },
+  {
+    "value": "BIOLOGY",
+    "display_name": "Biology"
+  },
+  {
+    "value": "BI@MIC",
+    "display_name": "Biology @ MIC"
+  },
+  {
+    "value": "BMED-ENG",
+    "display_name": "Biomedical Engineering"
+  },
+  {
+    "value": "BIOSTATS",
+    "display_name": "Biostatistics"
+  },
+  {
+    "value": "BIOST&EP",
+    "display_name": "Biostats & Epidemiology"
+  },
+  {
+    "value": "BIOTECH",
+    "display_name": "Biotechnology"
+  },
+  {
+    "value": "BCT",
+    "display_name": "Building & Construction Tech"
+  },
+  {
+    "value": "CATALAN",
+    "display_name": "Catalan"
+  },
+  {
+    "value": "CHEM-ENG",
+    "display_name": "Chemical Engineering"
+  },
+  {
+    "value": "CHEM",
+    "display_name": "Chemistry"
+  },
+  {
+    "value": "CHINESE",
+    "display_name": "Chinese"
+  },
+  {
+    "value": "CE-ENGIN",
+    "display_name": "Civil & Environmental Engrg"
+  },
+  {
+    "value": "CLASSICS",
+    "display_name": "Classics"
+  },
+  {
+    "value": "CC@MIC",
+    "display_name": "College Curriculum @ MCI"
+  },
+  {
+    "value": "CICS",
+    "display_name": "College of Inform & Comp Sci"
+  },
+  {
+    "value": "COMM",
+    "display_name": "Communication"
+  },
+  {
+    "value": "COMM-DIS",
+    "display_name": "Communication Disorders"
+  },
+  {
+    "value": "COM-HLTH",
+    "display_name": "Community Health"
+  },
+  {
+    "value": "COMP-LIT",
+    "display_name": "Comparative Literature"
+  },
+  {
+    "value": "COMPSCI",
+    "display_name": "Computer Science"
+  },
+  {
+    "value": "DANCE",
+    "display_name": "Dance"
+  },
+  {
+    "value": "DANISH",
+    "display_name": "Danish"
+  },
+  {
+    "value": "DUTCH",
+    "display_name": "Dutch"
+  },
+  {
+    "value": "ECON",
+    "display_name": "Economics"
+  },
+  {
+    "value": "EDUC",
+    "display_name": "Education"
+  },
+  {
+    "value": "ED@MIC",
+    "display_name": "Education @ MIC"
+  },
+  {
+    "value": "E&C-ENG",
+    "display_name": "Electrical & Computer Engin"
+  },
+  {
+    "value": "ENGIN",
+    "display_name": "Engineering"
+  },
+  {
+    "value": "ENGLISH",
+    "display_name": "English"
+  },
+  {
+    "value": "ENGLWRIT",
+    "display_name": "English Writing Program"
+  },
+  {
+    "value": "ESL",
+    "display_name": "English as a Second Language"
+  },
+  {
+    "value": "ENTOMOL",
+    "display_name": "Entomology"
+  },
+  {
+    "value": "ECO",
+    "display_name": "Environmental Conservation"
+  },
+  {
+    "value": "ENVIRDES",
+    "display_name": "Environmental Design"
+  },
+  {
+    "value": "EHS",
+    "display_name": "Environmental Health Sciences"
+  },
+  {
+    "value": "ENVIRSCI",
+    "display_name": "Environmental Science"
+  },
+  {
+    "value": "EPI",
+    "display_name": "Epidemiology"
+  },
+  {
+    "value": "EXCHANGE",
+    "display_name": "Exchange"
+  },
+  {
+    "value": "FFYS",
+    "display_name": "Faculty First Year Seminars"
+  },
+  {
+    "value": "FILM-ST",
+    "display_name": "Film Studies"
+  },
+  {
+    "value": "FINANCE",
+    "display_name": "Finance"
+  },
+  {
+    "value": "FINOPMGT",
+    "display_name": "Finance and Operations Mgt"
+  },
+  {
+    "value": "FINNISH",
+    "display_name": "Finnish"
+  },
+  {
+    "value": "FORLANGC",
+    "display_name": "Five Coll Ctr: World Languages"
+  },
+  {
+    "value": "FOOD-SCI",
+    "display_name": "Food Science"
+  },
+  {
+    "value": "FRENCHST",
+    "display_name": "French Studies"
+  },
+  {
+    "value": "FRENCHED",
+    "display_name": "French-Student Teaching"
+  },
+  {
+    "value": "GEOGRAPH",
+    "display_name": "Geography"
+  },
+  {
+    "value": "GEOLOGY",
+    "display_name": "Geology"
+  },
+  {
+    "value": "GEO-SCI",
+    "display_name": "Geosciences"
+  },
+  {
+    "value": "GERMAN",
+    "display_name": "German"
+  },
+  {
+    "value": "GRADSCH",
+    "display_name": "Graduate School"
+  },
+  {
+    "value": "GREEK",
+    "display_name": "Greek"
+  },
+  {
+    "value": "HAITCREO",
+    "display_name": "Haitian Creole"
+  },
+  {
+    "value": "HPP",
+    "display_name": "Health Promotion & Policy"
+  },
+  {
+    "value": "HEBREW",
+    "display_name": "Hebrew"
+  },
+  {
+    "value": "HERIT",
+    "display_name": "Heritage Studies"
+  },
+  {
+    "value": "HISPAN",
+    "display_name": "Hispanic Lit. & Linguistics"
+  },
+  {
+    "value": "HISTORY",
+    "display_name": "History"
+  },
+  {
+    "value": "HI@MIC",
+    "display_name": "History @ MIC"
+  },
+  {
+    "value": "HONORS",
+    "display_name": "Honors College"
+  },
+  {
+    "value": "HT-MGT",
+    "display_name": "Hospitality & Tourism Managmnt"
+  },
+  {
+    "value": "HUMANDEV",
+    "display_name": "Human Development"
+  },
+  {
+    "value": "HU@MIC",
+    "display_name": "Humanities @ MIC"
+  },
+  {
+    "value": "HM&FNART",
+    "display_name": "Humanities and Fine Arts"
+  },
+  {
+    "value": "INFO",
+    "display_name": "Informatics"
+  },
+  {
+    "value": "INFOSEC",
+    "display_name": "Information Security"
+  },
+  {
+    "value": "IALS",
+    "display_name": "Inst for Applied Life Sciences"
+  },
+  {
+    "value": "INTERPRT",
+    "display_name": "Interpreter's Studies"
+  },
+  {
+    "value": "SCH-MGMT",
+    "display_name": "Isenberg School of Management"
+  },
+  {
+    "value": "ITALIAN",
+    "display_name": "Italian Studies"
+  },
+  {
+    "value": "ITALIAED",
+    "display_name": "Italian-Student Teaching"
+  },
+  {
+    "value": "JAPANESE",
+    "display_name": "Japanese"
+  },
+  {
+    "value": "JOURNAL",
+    "display_name": "Journalism"
+  },
+  {
+    "value": "JUDAIC",
+    "display_name": "Judaic Studies"
+  },
+  {
+    "value": "KIN",
+    "display_name": "Kinesiology"
+  },
+  {
+    "value": "KOREAN",
+    "display_name": "Korean"
+  },
+  {
+    "value": "LLACTING",
+    "display_name": "LL: Acting"
+  },
+  {
+    "value": "LLART",
+    "display_name": "LL: Art & Photography"
+  },
+  {
+    "value": "LLAMS",
+    "display_name": "LL: Arts Management"
+  },
+  {
+    "value": "LLBUS",
+    "display_name": "LL: Business & Financial Plan"
+  },
+  {
+    "value": "LLCAR",
+    "display_name": "LL: Career & Personal Develpmt"
+  },
+  {
+    "value": "LLCOM",
+    "display_name": "LL: Computers"
+  },
+  {
+    "value": "LLLEAD",
+    "display_name": "LL: Donahue Leadership Prog"
+  },
+  {
+    "value": "LLESL",
+    "display_name": "LL: English as a 2nd Language"
+  },
+  {
+    "value": "LLFOOD",
+    "display_name": "LL: Food and Drink"
+  },
+  {
+    "value": "LLINGARM",
+    "display_name": "LL: Global Asset & Risk Mgmt"
+  },
+  {
+    "value": "LLHEA",
+    "display_name": "LL: Health & Fitness"
+  },
+  {
+    "value": "LLEIP",
+    "display_name": "LL: Intensive English Program"
+  },
+  {
+    "value": "LLIEP",
+    "display_name": "LL: Intensive English Program"
+  },
+  {
+    "value": "LLLAN",
+    "display_name": "LL: Languages"
+  },
+  {
+    "value": "LLLCR",
+    "display_name": "LL: License Renewal"
+  },
+  {
+    "value": "LLMUS",
+    "display_name": "LL: Music"
+  },
+  {
+    "value": "LLPARKS",
+    "display_name": "LL: Parks & Conservation Law"
+  },
+  {
+    "value": "LLPER",
+    "display_name": "LL: Personal Awareness"
+  },
+  {
+    "value": "LLREA",
+    "display_name": "LL: Real Estate"
+  },
+  {
+    "value": "LLPLSOIL",
+    "display_name": "LL: Soils/Plants/Insects"
+  },
+  {
+    "value": "LLSPEC",
+    "display_name": "LL: Special Interest"
+  },
+  {
+    "value": "LLSR&O",
+    "display_name": "LL: Sports,Recrtn & Outdoors"
+  },
+  {
+    "value": "LLSTU",
+    "display_name": "LL: Study Skills & Test Taking"
+  },
+  {
+    "value": "LLGREEN",
+    "display_name": "LL: Sustainability/Green"
+  },
+  {
+    "value": "LLTRAIN",
+    "display_name": "LL: Training"
+  },
+  {
+    "value": "LLWIND",
+    "display_name": "LL: Wind Energy"
+  },
+  {
+    "value": "LLWOOD",
+    "display_name": "LL: Wood Identification"
+  },
+  {
+    "value": "LLWRI",
+    "display_name": "LL: Writing, Literature &Drama"
+  },
+  {
+    "value": "LABOR",
+    "display_name": "Labor Studies"
+  },
+  {
+    "value": "LANDARCH",
+    "display_name": "Landscape Architecture"
+  },
+  {
+    "value": "LANDCONT",
+    "display_name": "Landscape Contracting"
+  },
+  {
+    "value": "LLC",
+    "display_name": "Languages, Literature&Culture"
+  },
+  {
+    "value": "LATIN",
+    "display_name": "Latin"
+  },
+  {
+    "value": "LATIN-AM",
+    "display_name": "Latin American Studies"
+  },
+  {
+    "value": "LATIN-ED",
+    "display_name": "Latin-Student Teaching"
+  },
+  {
+    "value": "LEGAL",
+    "display_name": "Legal Studies"
+  },
+  {
+    "value": "LINGUIST",
+    "display_name": "Linguistics"
+  },
+  {
+    "value": "LI@MIC",
+    "display_name": "Literature Elective @ MIC"
+  },
+  {
+    "value": "MANAGMNT",
+    "display_name": "Management"
+  },
+  {
+    "value": "MARKETNG",
+    "display_name": "Marketing"
+  },
+  {
+    "value": "MATH",
+    "display_name": "Mathematics"
+  },
+  {
+    "value": "MA@MIC",
+    "display_name": "Mathematics @ MIC"
+  },
+  {
+    "value": "M&I-ENG",
+    "display_name": "Mechanical & Industrial Engrg"
+  },
+  {
+    "value": "MICROBIO",
+    "display_name": "Microbiology"
+  },
+  {
+    "value": "MIDEAST",
+    "display_name": "Middle Eastern Studies"
+  },
+  {
+    "value": "MILITARY",
+    "display_name": "Military Leadership"
+  },
+  {
+    "value": "EURO",
+    "display_name": "Modern European Studies"
+  },
+  {
+    "value": "MOLCLBIO",
+    "display_name": "Molecular & Cellular Biology"
+  },
+  {
+    "value": "MUSIC",
+    "display_name": "Music"
+  },
+  {
+    "value": "MUSIC-ED",
+    "display_name": "Music Education"
+  },
+  {
+    "value": "MUSICAPP",
+    "display_name": "Music, Applied"
+  },
+  {
+    "value": "NEXCHNG",
+    "display_name": "National Student Exchange"
+  },
+  {
+    "value": "NRC",
+    "display_name": "Natural Resources Conservation"
+  },
+  {
+    "value": "NATSCI",
+    "display_name": "Natural Sciences"
+  },
+  {
+    "value": "NEUROS&B",
+    "display_name": "Neuroscience & Behavior"
+  },
+  {
+    "value": "NURSING",
+    "display_name": "Nursing"
+  },
+  {
+    "value": "NUTRITN",
+    "display_name": "Nutrition"
+  },
+  {
+    "value": "OIM",
+    "display_name": "Operations & Info Management"
+  },
+  {
+    "value": "ORG&EVBI",
+    "display_name": "Organismic & Evolutionary Biol"
+  },
+  {
+    "value": "PHIL",
+    "display_name": "Philosophy"
+  },
+  {
+    "value": "PHYSICS",
+    "display_name": "Physics"
+  },
+  {
+    "value": "PLANTBIO",
+    "display_name": "Plant Biology"
+  },
+  {
+    "value": "POLISH",
+    "display_name": "Polish"
+  },
+  {
+    "value": "POLISCI",
+    "display_name": "Political Science"
+  },
+  {
+    "value": "PO@MIC",
+    "display_name": "Political Science @ MIC"
+  },
+  {
+    "value": "POLYMER",
+    "display_name": "Polymer Science & Engineering"
+  },
+  {
+    "value": "PORTUG",
+    "display_name": "Portuguese"
+  },
+  {
+    "value": "PORTUGED",
+    "display_name": "Portuguese-Student Teaching"
+  },
+  {
+    "value": "PSYCH",
+    "display_name": "Psychology & Brain Sciences"
+  },
+  {
+    "value": "PUBHLTH",
+    "display_name": "Public Health"
+  },
+  {
+    "value": "REGIONPL",
+    "display_name": "Regional Planning"
+  },
+  {
+    "value": "RES-ECON",
+    "display_name": "Resource Economics"
+  },
+  {
+    "value": "ROMANIA",
+    "display_name": "Romanian"
+  },
+  {
+    "value": "RUSSIAN",
+    "display_name": "Russian"
+  },
+  {
+    "value": "SCANDIN",
+    "display_name": "Scandinavian"
+  },
+  {
+    "value": "SCHPSYCH",
+    "display_name": "School Psychology"
+  },
+  {
+    "value": "SPHHS",
+    "display_name": "School of Pub Hlth & Hlth Sci"
+  },
+  {
+    "value": "SPP",
+    "display_name": "School of Public Policy"
+  },
+  {
+    "value": "SC@MIC",
+    "display_name": "Science @ MIC"
+  },
+  {
+    "value": "SRVCLRNG",
+    "display_name": "Service Learning"
+  },
+  {
+    "value": "SLAVIC",
+    "display_name": "Slavic"
+  },
+  {
+    "value": "SEESTU",
+    "display_name": "Slavic & E European Studies"
+  },
+  {
+    "value": "SOCBEHAV",
+    "display_name": "Social & Behavioral Science"
+  },
+  {
+    "value": "STPEC",
+    "display_name": "Social Thought & Polic. Econ"
+  },
+  {
+    "value": "SOCIOL",
+    "display_name": "Sociology"
+  },
+  {
+    "value": "SPANISH",
+    "display_name": "Spanish"
+  },
+  {
+    "value": "SPANI-ED",
+    "display_name": "Spanish - Student Teaching"
+  },
+  {
+    "value": "SPORTMGT",
+    "display_name": "Sport Management"
+  },
+  {
+    "value": "STATISTC",
+    "display_name": "Statistics"
+  },
+  {
+    "value": "STOCKSCH",
+    "display_name": "Stockbridge Sch of Agriculture"
+  },
+  {
+    "value": "SUSTCOMM",
+    "display_name": "Sustainable Community"
+  },
+  {
+    "value": "SWEDISH",
+    "display_name": "Swedish"
+  },
+  {
+    "value": "THEATER",
+    "display_name": "Theater"
+  },
+  {
+    "value": "PRACT",
+    "display_name": "Transfer Practicum"
+  },
+  {
+    "value": "UMA-XCHG",
+    "display_name": "UMass Graduate Course Exchange"
+  },
+  {
+    "value": "UMASS",
+    "display_name": "UMass Practicum"
+  },
+  {
+    "value": "UNIVRSTY",
+    "display_name": "Univ Interdepartmental Course"
+  },
+  {
+    "value": "UWW",
+    "display_name": "University Without Walls"
+  },
+  {
+    "value": "VT@MIC",
+    "display_name": "Vet Tech @ Mt. Ida College"
+  },
+  {
+    "value": "WGSS",
+    "display_name": "Women,Gender,Sexuality Studies"
+  },
+  {
+    "value": "WSTNURSE",
+    "display_name": "Worcester Nursing Program"
+  },
+  {
+    "value": "YIDDISH",
+    "display_name": "Yiddish"
+  }
+]

@@ -1,16 +1,16 @@
 <template>
-  <div class="class">
+  <div class="course">
     <h1>
-      {{ selectedClass.name }}
+      {{ selectedCourse.name }}
     </h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Class',
+  name: 'Course',
   props: {
-    selectedClass: Object
+    selectedCourse: Object
   }
 }
 </script>

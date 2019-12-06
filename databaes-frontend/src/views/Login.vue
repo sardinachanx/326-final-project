@@ -33,10 +33,14 @@ export default {
   },
   methods: {
     login: function () {
-      console.log('here')
+      // TODO: remember me
+      // TODO: check for valid fields
+
       this.$store.dispatch('obtainToken', {
         email: this.email,
         password: this.password
+      }).then(() => {
+        this.$emit('pull-data', () => { this.$router.push('/profile') })
       })
     }
   }

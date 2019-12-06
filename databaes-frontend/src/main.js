@@ -20,15 +20,21 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    updateToken (state, { access, refresh }) {
+    setToken (state, { access, refresh }) {
       state.access = access
       state.refresh = refresh
       localStorage.setItem('access', access)
       localStorage.setItem('refresh', refresh)
     },
+    updateToken (state, { access }) {
+      state.access = access
+      localStorage.setItem('access', access)
+    },
     removeToken (state) {
-      localStorage.removeItem('t')
-      state.jwt = null
+      state.access = null
+      state.refresh = null
+      localStorage.removeItem('access')
+      localStorage.removeItem('refresh')
     }
   },
   actions: {
@@ -38,9 +44,9 @@ const store = new Vuex.Store({
         password: password
       }
 
-      axios.post(this.state.endpoints.obtainJWT, payload)
+      return axios.post(this.state.endpoints.obtainJWT, payload)
         .then((response) => {
-          this.commit('updateToken', response.data)
+          this.commit('setToken', response.data)
         })
         .catch((error) => {
           console.log(error)
@@ -48,29 +54,31 @@ const store = new Vuex.Store({
     },
     refreshToken () {
       const payload = {
-        token: this.state.refresh
+        refresh: this.state.refresh
       }
 
-      axios.post(this.state.endpoints.refreshJWT, payload)
+      return axios.post(this.state.endpoints.refreshJWT, payload)
         .then((response) => {
-          this.commit('updateToken', response.data.token)
+          this.commit('updateToken', response.data)
         })
         .catch((error) => {
           console.log(error)
         })
     },
     inspectToken () {
-      const token = this.state.refresh
+      const token = this.state.access
       if (token) {
         const decoded = jwtDecode(token)
         const exp = decoded.exp
         const origIat = decoded.orig_iat
 
         if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - origIat < 628200) {
-          this.dispatch('refreshToken')
+          return this.dispatch('refreshToken')
         } else if (exp - (Date.now() / 1000) < 1800) {
+          return Promise.resolve()
           // DO NOTHING, DO NOT REFRESH
         } else {
+          return this.dispatch('refreshToken')
           // TODO: PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
         }
       }

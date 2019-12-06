@@ -1,43 +1,57 @@
 <template>
-  <div id="app">
-    <header>
-      <a style="display: inline; margin: 0; color: inherit" href="/">Databaes</a>
-      <nav>
-        <div class="mainnav" v-if="loggedIn">
-          <router-link to="/">Home</router-link> |
-          <router-link to="/homeworkplanner">Homework Planner</router-link> |
-          <router-link to="/classes">Classes</router-link> |
-          <router-link to="/search">Search</router-link> |
-          <router-link to="/profile">Profile</router-link>
-        </div>
-        <div class="loginnav">
-          <router-link to="/login" v-if="!loggedIn">Login</router-link> |
-          <router-link to="/register" v-if="!loggedIn">Register</router-link>
-          <a href="" v-on:click.stop.prevent="logout" v-if="loggedIn">Logout</a>
-        </div>
-      </nav>
-    </header>
-    <router-view id="body" v-on:showError="showError"/>
-    <div id="toast" v-if="errorLoading != null">
-      Oops! Something went wrong.
-      <br />
-      <div v-if="errorLoading != null">&#x26a0; {{ errorLoading }}</div>
-      <div v-if="errorLoading == null">&#x26a0; Couldn't connect <br /> to the server </div>
+  <div>
+    <div id="app" v-if="doneLoading">
+      <header>
+        <a style="display: inline; margin: 0; color: inherit" href="/">Databaes</a>
+        <nav>
+          <div class="mainnav" v-if="loggedIn">
+            <router-link to="/">Home</router-link> |
+            <router-link to="/homeworkplanner">Homework Planner</router-link> |
+            <router-link to="/courses">Courses</router-link> |
+            <router-link to="/search">Search</router-link> |
+            <router-link to="/profile">Profile</router-link>
+          </div>
+          <div class="loginnav">
+            <router-link to="/login" v-if="!loggedIn">Login</router-link> |
+            <router-link to="/register" v-if="!loggedIn">Register</router-link>
+            <a href="" v-on:click.stop.prevent="logout" v-if="loggedIn">Logout</a>
+          </div>
+        </nav>
+      </header>
+      <router-view id="body" v-on:showError="showError" :user="user" v-on:pull-data="pullData"/>
+      <div id="toast" v-if="errorLoading != null">
+        Oops! Something went wrong.
+        <br />
+        <div v-if="errorLoading != null">&#x26a0; {{ errorLoading }}</div>
+        <div v-if="errorLoading == null">&#x26a0; Couldn't connect <br /> to the server </div>
+      </div>
+    </div>
+    <div id="app" v-if="!doneLoading">
+      <h1> Loading... </h1>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'app',
   data: function () {
     return {
-      errorLoading: null
+      errorLoading: null,
+      user: null,
+      doneLoading: false
     }
   },
   computed: {
     loggedIn: function () {
-      return this.$store.access !== null
+      return this.$store.state.access !== null
+    },
+    config: function () {
+      return {
+        headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
+      }
     }
   },
   methods: {
@@ -45,11 +59,34 @@ export default {
       this.errorLoading = error
     },
     logout: function () {
-      // TODO: actually logout
+      this.$store.commit('removeToken')
+      this.user = null
+      this.$router.push('/')
+    },
+    pullData: function (callback) {
+      if (this.loggedIn) {
+        this.doneLoading = false
+        axios.get('v1/users/me/', this.config)
+          .then((response) => {
+            this.user = response.data
+            this.doneLoading = true
+            callback()
+          })
+          .catch((error) => {
+            this.$emit('showError', error.data)
+            this.doneLoading = true
+            callback()
+          })
+      } else {
+        this.doneLoading = true
+        callback()
+      }
     }
   },
   mounted: function () {
-    // TODO: load data from backend
+    this.$store.dispatch('inspectToken').then(() => {
+      this.pullData(() => {})
+    })
   }
 }
 </script>

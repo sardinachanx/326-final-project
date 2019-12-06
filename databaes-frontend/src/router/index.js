@@ -16,9 +16,9 @@ const routes = [
     component: () => import('../views/Profile.vue')
   },
   {
-    path: '/classes',
-    name: 'classes',
-    component: () => import('../views/Classes.vue')
+    path: '/courses',
+    name: 'courses',
+    component: () => import('../views/Courses.vue')
   },
   {
     path: '/homeworkplanner',

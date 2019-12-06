@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'register',
   components: {
@@ -48,27 +50,26 @@ export default {
   },
   methods: {
     register: function () {
-      let redirect = this.$auth.redirect()
-
       // TODO: data verification
+      // TODO: remember me
 
-      this.$auth.register({
-        data: {
-          username: this.username,
-          password: this.password,
-          email: this.email,
-          name: this.name
-        },
-        autoLogin: true,
-        rememberMe: this.rememberMe,
-        redirect: {
-          name: redirect ? redirect.from.name : 'profile'
-        }
-      }).then(() => {
+      const payload = {
+        username: this.username,
+        email: this.email,
+        password: this.password,
+        name: this.name
+      }
 
-      }, (res) => {
-        this.$emit('showError', res.data)
-      })
+      axios.post('v1/users/', payload)
+        .then((response) => {
+          this.$store.dispatch('obtainToken', {
+            email: this.email,
+            password: this.password
+          })
+        })
+        .catch((error) => {
+          this.$emit('showError', error.data)
+        })
     }
   }
 }

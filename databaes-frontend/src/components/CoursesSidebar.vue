@@ -1,27 +1,28 @@
 <template>
   <section id="sidebar">
-    <ul>
+    <h3> Courses </h3>
+    <ul v-if="courses !== undefined && courses !== null">
       <li
-        v-for="classType in classes"
-        :key="classType.id"
-        :id="classType.id"
-        :name="classType.name"
+        v-for="courseType in courses"
+        :key="courseType.id"
+        :id="courseType.id"
+        :name="courseType.name"
         class="assignment"
-        :class="{ selected: classType.id == selectedClassNumber }"
+        :course="{ selected: courseType.id == selectedCourseNumber }"
         >
         <div
-          @click="$emit('selectClass', classType.id)"
+          @click="$emit('selectCourse', courseType.id)"
           style="display: inline; cursor: pointer;">
-          {{ classType.name }}
+          {{ courseType.name }}
         </div>
         <ul class="assignments">
           <li
-            v-for="assignment in classType.assignments"
+            v-for="assignment in courseType.assignments"
             :key="assignment.id"
             :id="assignment.id"
             :name="assignment.name"
             class="assignment"
-            :class="{
+            :course="{
               selected: assignment.id == selectedAssignmentNumber
             }"
             @click="$emit('selectAssignment', assignment.id)">
@@ -30,15 +31,18 @@
         </ul>
       </li>
     </ul>
+    <p v-if="courses === undefined || courses === null">
+      Not enrolled in any courses!
+    </p>
   </section>
 </template>
 
 <script>
 export default {
-  name: 'ClassesSidebar',
+  name: 'CoursesSidebar',
   props: {
-    classes: Array,
-    selectedClassNumber: Number,
+    courses: Array,
+    selectedCourseNumber: Number,
     selectedAssignmentNumber: Number
   }
 }

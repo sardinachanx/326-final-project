@@ -3,7 +3,13 @@
     <h1>Profile</h1>
     <form v-if="true">
       <p>
-        Username: {{ $auth.user() }}
+        Username: {{ user.username }}
+      </p>
+      <p>
+        Email: {{ user.email }}
+      </p>
+      <p>
+        Name: {{ user.name }}
       </p>
     </form>
   </div>
