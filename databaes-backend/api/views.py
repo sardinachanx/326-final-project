@@ -14,14 +14,19 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import Assignment, Course, DayEntry, Enrollment, Student, User
 from .permissions import IsEnrollmentOwner, IsProfileOwner
 from .serializers import (AssignmentSerializer, CourseSerializer, DayEntrySerializer,
-                          EnrollmentSerializer, StatisticsSerializer, UserSerializer)
+                          EnrollmentSerializer, SimplifiedAssignmentSerializer,
+                          SimplifiedCourseSerializer, StatisticsSerializer, UserSerializer)
 
 # Create your views here.
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
-    serializer_class = CourseSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return SimplifiedCourseSerializer
+        return CourseSerializer
 
 
 class AssignmentViewSet(viewsets.ModelViewSet):
@@ -30,8 +35,14 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
 
 class DayEntryViewSet(viewsets.ModelViewSet):
-    queryset = DayEntry.objects.all()
     serializer_class = DayEntrySerializer
+
+    def get_queryset(self):
+        queryset = DayEntry.objects.all().filter(user=self.request.user)
+        assignment_id = self.request.query_params.get('assignment_id', None)
+        if assignment_id is not None: 
+            queryset = queryset.filter(assignment__id=assignment_id)
+        return queryset
 
 
 class EnrollmentViewSet(viewsets.ModelViewSet):
@@ -90,7 +101,8 @@ class StatisticsViewSet(viewsets.ViewSet):
 
     def list(self, request):
         d = request.query_params.get('date', None)
+        interval = request.query_params.get('pages', 4)
         if d is None: 
             d = date.today()
-        s = StatisticsSerializer(instance=d, context={'request': request})
+        s = StatisticsSerializer(instance=d, context={'request': request, 'pages': interval})
         return Response(s.data)
