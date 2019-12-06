@@ -25,7 +25,7 @@ class Assignment(models.Model):
     assigned_date = models.DateField()
     due_date = models.DateField()
     type = models.CharField(
-        max_length=2, choices=ASSIGNMENT_TYPES, default='PS')
+        max_length=8, choices=ASSIGNMENT_TYPES, default='PS')
     number = models.PositiveSmallIntegerField(default=0)
     course = models.ForeignKey(
         'Course', on_delete=models.CASCADE, related_name='assignments')
@@ -60,7 +60,7 @@ class Student(models.Model):
 # Model denoting required information for a course. Maintains a list
 # of students enrolled, but this should not be accessible.
 class Course(models.Model):
-    subject = models.CharField(max_length=7, choices=COURSE_SUBJECTS, default='')
+    subject = models.CharField(max_length=8, choices=COURSE_SUBJECTS, default='')
     course_number = models.CharField(max_length=5)
     name = models.CharField(max_length=100)
     student = models.ManyToManyField(

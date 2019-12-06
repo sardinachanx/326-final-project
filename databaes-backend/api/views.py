@@ -1,23 +1,32 @@
+from datetime import date
+
 from django.conf import settings
 from django.contrib.auth import authenticate, login
+from django.db.models.query import EmptyQuerySet
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
 from rest_framework.serializers import CurrentUserDefault, HiddenField
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .models import Assignment, Course, DayEntry, Enrollment, User
+from .models import Assignment, Course, DayEntry, Enrollment, Student, User
 from .permissions import IsEnrollmentOwner, IsProfileOwner
-from .serializers import (AssignmentSerializer, CourseSerializer,
-                          CustomTokenObtainPairSerializer, DayEntrySerializer,
-                          EnrollmentSerializer, UserSerializer)
+from .serializers import (AssignmentSerializer, CourseSerializer, DayEntrySerializer,
+                          EnrollmentSerializer, SimplifiedAssignmentSerializer,
+                          SimplifiedCourseSerializer, StatisticsSerializer, UserSerializer)
 
 # Create your views here.
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
-    serializer_class = CourseSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return SimplifiedCourseSerializer
+        return CourseSerializer
 
 
 class AssignmentViewSet(viewsets.ModelViewSet):
@@ -26,8 +35,14 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
 
 class DayEntryViewSet(viewsets.ModelViewSet):
-    queryset = DayEntry.objects.all()
     serializer_class = DayEntrySerializer
+
+    def get_queryset(self):
+        queryset = DayEntry.objects.all().filter(user=self.request.user)
+        assignment_id = self.request.query_params.get('assignment_id', None)
+        if assignment_id is not None: 
+            queryset = queryset.filter(assignment__id=assignment_id)
+        return queryset
 
 
 class EnrollmentViewSet(viewsets.ModelViewSet):
@@ -73,5 +88,21 @@ class UserViewSet(viewsets.ModelViewSet):
             return super().get_object()
 
 
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
+class StatisticsViewSet(viewsets.ViewSet):
+    queryset = Student.objects.none()
+    serializer_class = StatisticsSerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
+
+    def list(self, request):
+        d = request.query_params.get('date', None)
+        interval = request.query_params.get('pages', 4)
+        if d is None: 
+            d = date.today()
+        s = StatisticsSerializer(instance=d, context={'request': request, 'pages': interval})
+        return Response(s.data)
