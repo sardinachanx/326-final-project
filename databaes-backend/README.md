@@ -27,10 +27,10 @@ psql
 ```
 
 4. Create new database and user, and grant all database privileges to user
-```Shell
-psql > CREATE DATABASE db_name;
-psql > CREATE USER db_user WITH ENCRYPTED PASSWORD db_pass;
-psql > GRANT ALL PRIVILEGES ON DATABASE db_name TO db_user;
+```SQL
+CREATE DATABASE db_name;
+CREATE USER db_user WITH ENCRYPTED PASSWORD db_pass;
+GRANT ALL PRIVILEGES ON DATABASE db_name TO db_user;
 ```
 
 5. Add the following to your `.bash_profile` or `.bashrc`:
