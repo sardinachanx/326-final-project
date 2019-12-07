@@ -83,7 +83,7 @@ class AssignmentSerializer(SimplifiedAssignmentSerializer):
         date_range = duration_dict.keys()
         stringified_duration_dict = {}
         for day in daterange(min([min(date_range, default=obj.assigned_date), obj.assigned_date]), 
-                                max([max(date_range, default=obj.assigned_date), obj.due_date]) + timedelta(1)):
+                                max([max(date_range, default=obj.due_date), obj.due_date]) + timedelta(1)):
             if day not in duration_dict:
                 stringified_duration_dict[str(day)] = timedelta(hours=0)
             else:
