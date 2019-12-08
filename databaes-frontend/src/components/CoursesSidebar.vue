@@ -1,32 +1,40 @@
 <template>
   <section id="sidebar">
-    <h3> Courses </h3>
     <ul v-if="courses !== undefined && courses !== null">
+      <h3
+        :class="{ course_selector: selectedCourseNumber !== -1 }"
+        @click="$emit('selectCourse', -1)"
+        > Courses </h3>
       <li
-        v-for="courseType in courses"
-        :key="courseType.id"
-        :id="courseType.id"
-        :name="courseType.name"
+        :class="{ selected: selectedCourseNumber === -1 }"
+        style="list-style-type: none"
+        @click="$emit('selectCourse', -1)"
+        > Enroll in more courses </li>
+      <li
+        v-for="course in courses"
+        :key="course.course"
+        :id="course.course"
+        :name="course.course_name"
         class="assignment"
-        :course="{ selected: courseType.id == selectedCourseNumber }"
+        :class="{ selected: course.course == selectedCourseNumber }"
         >
         <div
-          @click="$emit('selectCourse', courseType.id)"
+          @click="$emit('selectCourse', course.course)"
           style="display: inline; cursor: pointer;">
-          {{ courseType.name }}
+          {{ course.course_name }}
         </div>
         <ul class="assignments">
           <li
-            v-for="assignment in courseType.assignments"
+            v-for="assignment in course.assignments"
             :key="assignment.id"
             :id="assignment.id"
             :name="assignment.name"
             class="assignment"
-            :course="{
+            :class="{
               selected: assignment.id == selectedAssignmentNumber
             }"
             @click="$emit('selectAssignment', assignment.id)">
-            {{ assignment.name }}
+            {{ assignment.type }} {{ assignment.number }}
           </li>
         </ul>
       </li>
@@ -54,6 +62,10 @@ li {
   padding-bottom: 2px;
 }
 
+.course_selector {
+  cursor: pointer;
+}
+
 #sidebar > ul {
   list-style-position: inside;
   padding-left: 0;
@@ -62,6 +74,7 @@ li {
 #sidebar > ul > li {
   list-style-type: disclosure-closed;
   cursor: pointer;
+  text-decoration: underline;
 }
 
 #sidebar > ul > li > ul {
@@ -72,16 +85,19 @@ li {
   list-style-type: disclosure-open;
   font-weight: bold;
   cursor: default;
+  text-decoration: none;
 }
 
 #sidebar > ul > li.selected > ul {
   display: block;
   font-weight: normal;
   cursor: pointer;
+  text-decoration: underline;
 }
 
 #sidebar > ul > li > ul > li.selected {
   font-weight: bold;
   cursor: default;
+  text-decoration: none;
 }
 </style>

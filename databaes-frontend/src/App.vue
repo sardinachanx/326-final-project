@@ -18,16 +18,16 @@
           </div>
         </nav>
       </header>
-      <router-view id="body" v-on:showError="showError" :user="user" v-on:pull-data="pullData"/>
-      <div id="toast" v-if="errorLoading != null">
-        Oops! Something went wrong.
-        <br />
-        <div v-if="errorLoading != null">&#x26a0; {{ errorLoading }}</div>
-        <div v-if="errorLoading == null">&#x26a0; Couldn't connect <br /> to the server </div>
-      </div>
+      <router-view id="body" v-on:show-error="showError" :user="user" v-on:pull-data="pullData"/>
     </div>
     <div id="app" v-if="!doneLoading">
       <h1> Loading... </h1>
+    </div>
+    <div id="toast" v-if="errorLoading != null">
+      Oops! Something went wrong.
+      <br />
+      <div v-if="errorLoading != null">&#x26a0; {{ errorLoading }}</div>
+      <div v-if="errorLoading == null">&#x26a0; Couldn't connect <br /> to the server </div>
     </div>
   </div>
 </template>
@@ -56,6 +56,7 @@ export default {
   },
   methods: {
     showError: function (error) {
+      console.log('Showing error')
       this.errorLoading = error
     },
     logout: function () {
@@ -65,7 +66,6 @@ export default {
     },
     pullData: function (callback) {
       if (this.loggedIn) {
-        this.doneLoading = false
         axios.get('v1/users/me/', this.config)
           .then((response) => {
             this.user = response.data
@@ -73,7 +73,7 @@ export default {
             callback()
           })
           .catch((error) => {
-            this.$emit('showError', error.data)
+            this.errorLoading = error
             this.doneLoading = true
             callback()
           })
@@ -86,6 +86,9 @@ export default {
   mounted: function () {
     this.$store.dispatch('inspectToken').then(() => {
       this.pullData(() => {})
+    }).catch((error) => {
+      this.errorLoading = error
+      this.doneLoading = true
     })
   }
 }

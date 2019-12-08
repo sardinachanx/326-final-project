@@ -66,9 +66,8 @@ export default {
             email: this.email,
             password: this.password
           })
-        })
-        .catch((error) => {
-          this.$emit('showError', error.data)
+        }).catch((error) => {
+          this.$emit('show-error', error)
         })
     }
   }

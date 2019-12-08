@@ -1,24 +1,34 @@
 <template>
   <div class="courses body-with-sidebar">
-    <CoursesSidebar :courses="user.profile.courses" :selectedAssignmentNumber="selectedAssignmentNumber" :selectedCourseNumber="selectedCourseNumber" @selectCourse="selectCourse" @selectAssignment="selectAssignment"/>
+    <CoursesSidebar
+      :courses="user.courses"
+      :selectedAssignmentNumber="selectedAssignmentNumber"
+      :selectedCourseNumber="selectedCourseNumber"
+      @selectCourse="selectCourse"
+      @selectAssignment="selectAssignment"/>
     <section class="courseview">
       <Assignment
         v-if="selectedAssignment != null"
         :selectedAssignment="selectedAssignment"
         :selectedCourse="selectedCourse"
+        v-on:pull-data="$emit('pull-data', () => {}); selectCourse(selectedCourseNumber, selectedAssignmentNumber)"
         />
       <Course
         v-if="selectedAssignment == null && selectedCourse != null"
         :selectedCourse="selectedCourse"
+        v-on:pull-data="$emit('pull-data', () => {}); selectCourse(selectedCourseNumber)"
         />
       <EnrollCourseForm
         v-if="selectedAssignment == null && selectedCourse == null"
+        v-on:pull-data="$emit('pull-data', () => {})"
         />
     </section>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 import Assignment from '@/components/Assignment.vue'
 import Course from '@/components/Course.vue'
 import CoursesSidebar from '@/components/CoursesSidebar.vue'
@@ -37,14 +47,33 @@ export default {
   },
   data: function () {
     return {
-      selectedCourseNumber: 0,
+      selectedCourseNumber: -1,
       selectedAssignmentNumber: -1
     }
   },
   methods: {
-    selectCourse: function (courseId) {
-      this.selectedCourseNumber = courseId
-      this.selectedAssignmentNumber = -1
+    selectCourse: function (courseId, assignmentId) {
+      if (assignmentId === undefined || assignmentId === null) {
+        assignmentId = -1
+      }
+      if (courseId === -1) {
+        this.selectedCourseNumber = -1
+        this.selectedAssignmentNumber = -1
+        return
+      }
+
+      axios.get('v1/courses/' + courseId + '/', {
+        headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
+      })
+        .then((response) => {
+          this.selectedCourseNumber = courseId
+          this.selectedAssignmentNumber = assignmentId
+
+          this.$set(this.selectedCourse, 'assignments', response.data.assignments)
+        })
+        .catch((error) => {
+          this.$emit('show-error', error)
+        })
     },
     selectAssignment: function (assignmentId) {
       this.selectedAssignmentNumber = assignmentId
@@ -52,17 +81,27 @@ export default {
   },
   computed: {
     selectedCourse: function () {
-      if (this.user.profile.courses === undefined || this.user.profile.courses.length < this.selectedCourseNumber) {
+      if (this.user.courses === undefined || this.user.courses.length === 0 || this.selectedCourseNumber === -1) {
         return null
       }
-      return this.user.profile.courses[this.selectedCourseNumber]
+      for (let course of this.user.courses) {
+        if (course.course === this.selectedCourseNumber) {
+          return course
+        }
+      }
+      return null
     },
     selectedAssignment: function () {
-      if (this.selectedAssignmentNumber >= 0) {
-        return this.selectedCourse.assignments[this.selectedAssignmentNumber]
-      } else {
+      if (this.selectedCourse === null || this.selectedCourse.assignments === undefined || this.selectedCourse.assignments.length === 0 || this.selectedAssignmentNumber === -1) {
         return null
       }
+
+      for (let assignment of this.selectedCourse.assignments) {
+        if (assignment.id === this.selectedAssignmentNumber) {
+          return assignment
+        }
+      }
+      return null
     }
   }
 }

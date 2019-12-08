@@ -41,6 +41,8 @@ export default {
         password: this.password
       }).then(() => {
         this.$emit('pull-data', () => { this.$router.push('/profile') })
+      }).catch((error) => {
+        this.$emit('show-error', error)
       })
     }
   }

@@ -66,21 +66,28 @@ const store = new Vuex.Store({
         })
     },
     inspectToken () {
-      const token = this.state.access
-      if (token) {
-        const decoded = jwtDecode(token)
-        const exp = decoded.exp
-        const origIat = decoded.orig_iat
+      const accessToken = this.state.access
+      const refreshToken = this.state.refresh
+      if (accessToken && refreshToken) {
+        const decodedAccess = jwtDecode(accessToken)
+        const decodedRefresh = jwtDecode(refreshToken)
+        const accessExp = decodedAccess.exp
+        const refreshExp = decodedRefresh.exp
 
-        if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - origIat < 628200) {
-          return this.dispatch('refreshToken')
-        } else if (exp - (Date.now() / 1000) < 1800) {
-          return Promise.resolve()
-          // DO NOTHING, DO NOT REFRESH
-        } else {
-          return this.dispatch('refreshToken')
+        if (refreshExp - (Date.now() / 1000) < 0) {
           // TODO: PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
+          return Promise.reject(new Error('need to re-login'))
         }
+
+        if (accessExp - (Date.now() / 1000) < 1800) {
+          return this.dispatch('refreshToken')
+        } else {
+          // can continue to use the current token
+          return Promise.resolve()
+        }
+      } else {
+        // need to log in
+        return Promise.resolve()
       }
     }
   }

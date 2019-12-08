@@ -1,28 +1,99 @@
 <template>
   <div class="assignment">
     <h1>
-      {{ selectedClass.name }} - {{ selectedAssignment.name }}
+      {{ selectedCourse.course_name }} - {{ selectedAssignment.type }} {{ selectedAssignment.number }}
     </h1>
-    <div class="timeDisplay">
-      <h3> Total time spent: <strong>{{ selectedAssignment.totalTime }}</strong> hours </h3>
-      <h3>
-        Average time spent per day:
-        <strong>{{ selectedAssignment.averageTime }}</strong>
-        hours
-      </h3>
+    <div v-if="assignment !== null">
+      <div class="timeDisplay">
+        <h3> Total time spent: <strong>{{ Math.round(timeToHours(assignment.avg_total_hours)*10)/10 }}</strong> hours </h3>
+        <h3>
+          Average time spent per day:
+          <strong>{{ Math.round(Object.values(assignment.avg_daily_hours).reduce((a, b) => timeToHours(a) + timeToHours(b), 0) / Object.values(assignment.avg_daily_hours).length * 10) / 10 }}</strong>
+          hours
+        </h3>
+      </div>
+      <div class="graph">
+        Graph will go here
+      </div>
+      <AddDayEntryForm :assignmentId="this.assignment.id"  v-on:pull-data="$emit('pull-data', () => {})"/>
     </div>
-    <div class="graph">
-      Graph will go here
+    <div v-if="assignment === null">
+      <h3> Loading... </h3>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import AddDayEntryForm from '@/components/AddDayEntryForm.vue'
+
 export default {
   name: 'Assignment',
   props: {
     selectedAssignment: Object,
-    selectedClass: Object
+    selectedCourse: Object
+  },
+  data: function () {
+    return {
+      assignment: null,
+      stats: null
+    }
+  },
+  components: {
+    AddDayEntryForm
+  },
+  methods: {
+    loadAssignment: function () {
+      axios.get('v1/assignments/' + this.selectedAssignment.id + '/', {
+        headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
+      })
+        .then((response) => {
+          this.assignment = response.data
+        })
+        .catch((error) => {
+          // TODO: actually show error
+          this.$emit('show-error', error)
+        })
+      axios.get('v1/stats/', {
+        headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
+      })
+        .then((response) => {
+          this.stats = response.data
+        })
+        .catch((error) => {
+          // TODO: actually show error
+          this.$emit('show-error', error)
+        })
+    },
+    timeToHours: function (timeString) {
+      if (timeString === null || timeString === undefined) {
+        return null
+      }
+      if (Number.isFinite(timeString)) {
+        return timeString
+      }
+      if (timeString === '0.0') {
+        return 0
+      }
+      console.log(timeString)
+      let pattern = /(?:(\d+) days?, )?(\d+):(\d+):(\d+)/
+      let groups = timeString.match(pattern)
+      console.log(groups)
+      let time = 0
+      time += groups[1] === undefined ? 0 : parseInt(groups[1]) * 24 // optional days
+      time += parseInt(groups[2]) // hours
+      time += parseInt(groups[3]) / 60 // minutes
+      time += parseInt(groups[4]) / (60 * 60) // seconds
+      return time
+    }
+  },
+  watch: {
+    selectedAssignment: function () {
+      this.loadAssignment()
+    }
+  },
+  mounted: function () {
+    this.loadAssignment()
   }
 }
 </script>

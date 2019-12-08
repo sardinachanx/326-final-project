@@ -1,16 +1,22 @@
 <template>
   <div class="course">
     <h1>
-      {{ selectedCourse.name }}
+      {{ selectedCourse.course_name }}
     </h1>
+    <AddAssignmentForm :courseId="selectedCourse.course" v-on:pull-data="$emit('pull-data', () => {})"/>
   </div>
 </template>
 
 <script>
+import AddAssignmentForm from '@/components/AddAssignmentForm.vue'
+
 export default {
   name: 'Course',
   props: {
     selectedCourse: Object
+  },
+  components: {
+    AddAssignmentForm
   }
 }
 </script>
