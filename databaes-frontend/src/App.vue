@@ -7,7 +7,12 @@
           <div class="mainnav" v-if="loggedIn">
             <router-link to="/">Home</router-link> |
             <router-link to="/courses">My Courses</router-link> |
+            <router-link to="/compare">Compare</router-link> |
             <router-link to="/profile">Profile</router-link>
+          </div>
+          <div class="mainnav" v-if="!loggedIn">
+            <router-link to="/">Home</router-link> |
+            <router-link to="/compare">Compare</router-link> |
           </div>
           <div class="loginnav">
             <div v-if="!loggedIn">
@@ -18,7 +23,7 @@
           </div>
         </nav>
       </header>
-      <router-view id="body" :user="user" v-on:pull-data="pullData"/>
+      <router-view id="body" :user="user" :courses="courses" v-on:pull-data="pullData"/>
     </div>
     <div id="app" v-if="!doneLoading">
       <h1> Loading... </h1>
@@ -40,7 +45,8 @@ export default {
   data: function () {
     return {
       user: null,
-      doneLoading: false
+      doneLoading: false,
+      courses: null
     }
   },
   computed: {
@@ -61,10 +67,13 @@ export default {
     },
     pullData: function (callback) {
       if (this.loggedIn) {
-        axios.get('v1/users/me/', this.config)
+        let user = axios.get('v1/users/me/', this.config)
+        let courses = axios.get('v1/courses/', this.config)
+        Promise.all([user, courses])
           .then((response) => {
             this.$store.dispatch('showError', null)
-            this.user = response.data
+            this.user = response[0].data
+            this.courses = response[1].data
             this.doneLoading = true
             callback()
           })

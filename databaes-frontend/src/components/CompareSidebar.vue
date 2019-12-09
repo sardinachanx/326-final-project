@@ -21,18 +21,6 @@
           style="display: inline; cursor: pointer;">
           {{ course.course_name || (course.subject + ' ' + course.course_number + ' ' + course.name) }}
         </div>
-        <ul class="assignments">
-          <li
-            v-for="assignment in course.assignments"
-            :key="assignment.id"
-            class="assignment"
-            :class="{
-              selected: assignment.id == selectedAssignmentNumber
-            }"
-            @click="$emit('selectAssignment', assignment.id)">
-            {{ assignmentTypes[assignment.type] }} {{ assignment.number }}
-          </li>
-        </ul>
       </li>
     </ul>
     <p v-if="courses === undefined || courses === null">
@@ -43,7 +31,7 @@
 
 <script>
 export default {
-  name: 'CoursesSidebar',
+  name: 'CompareSidebar',
   props: {
     courses: Array,
     selectedCourseNumber: Number,
@@ -80,7 +68,6 @@ li {
 }
 
 #sidebar > ul > li {
-  list-style-type: disclosure-closed;
   cursor: pointer;
   text-decoration: underline;
 }
@@ -90,7 +77,6 @@ li {
 }
 
 #sidebar > ul > li.selected {
-  list-style-type: disclosure-open;
   font-weight: bold;
   cursor: default;
   text-decoration: none;

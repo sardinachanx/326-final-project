@@ -26,6 +26,11 @@ const routes = [
     component: () => import('../views/Login.vue')
   },
   {
+    path: '/compare',
+    name: 'compare',
+    component: () => import('../views/Compare.vue')
+  },
+  {
     path: '/register',
     name: 'register',
     component: () => import('../views/Register.vue')
