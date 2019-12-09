@@ -33,12 +33,12 @@ export default {
   },
   methods: {
     login: function () {
-      // TODO: remember me
       // TODO: check for valid fields
 
       this.$store.dispatch('obtainToken', {
         email: this.email,
-        password: this.password
+        password: this.password,
+        rememberMe: this.rememberMe
       }).then(() => {
         this.$emit('pull-data', () => { this.$router.push('/profile') })
       }).catch((error) => {

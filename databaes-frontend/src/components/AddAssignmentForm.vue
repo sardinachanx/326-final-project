@@ -46,9 +46,9 @@ export default {
     addAssignment: function () {
       console.log('adding ' + this.type + ' ' + this.number)
 
-      // TODO: check if course already exists
+      // TODO: check if assignment already exists
 
-      // create the course
+      // create the assignment
       const payload = {
         number: this.number,
         type: this.type,

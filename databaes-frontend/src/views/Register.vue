@@ -62,11 +62,15 @@ export default {
 
       axios.post('v1/users/', payload)
         .then((response) => {
-          this.$store.dispatch('obtainToken', {
+          return this.$store.dispatch('obtainToken', {
             email: this.email,
-            password: this.password
+            password: this.password,
+            rememberMe: this.rememberMe
           })
-        }).catch((error) => {
+        }).then(() => {
+          this.$emit('pull-data', () => { this.$router.push('/profile') })
+        })
+        .catch((error) => {
           this.$emit('show-error', error)
         })
     }

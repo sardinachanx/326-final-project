@@ -17,28 +17,54 @@ const store = new Vuex.Store({
     endpoints: {
       obtainJWT: 'login/',
       refreshJWT: 'refresh/'
-    }
+    },
+    rememberMe: localStorage.getItem('rememberMe') || false
   },
   mutations: {
-    setToken (state, { access, refresh }) {
+    setToken (state, { access, refresh, rememberMe }) {
+      if (rememberMe) {
+        localStorage.setItem('rememberMe', true)
+        state.rememberMe = true
+      } else {
+        localStorage.removeItem('rememberMe')
+        state.rememberMe = false
+      }
+
       state.access = access
       state.refresh = refresh
-      localStorage.setItem('access', access)
-      localStorage.setItem('refresh', refresh)
+      if (state.rememberMe) {
+        localStorage.setItem('access', access)
+        localStorage.setItem('refresh', refresh)
+      } else {
+        sessionStorage.setItem('access', access)
+        sessionStorage.setItem('refresh', refresh)
+      }
     },
     updateToken (state, { access }) {
       state.access = access
-      localStorage.setItem('access', access)
+      if (state.rememberMe) {
+        localStorage.setItem('access', access)
+      } else {
+        sessionStorage.setItem('access', access)
+      }
     },
     removeToken (state) {
       state.access = null
       state.refresh = null
-      localStorage.removeItem('access')
-      localStorage.removeItem('refresh')
+      if (state.rememberMe) {
+        localStorage.removeItem('access')
+        localStorage.removeItem('refresh')
+        localStorage.removeItem('rememberMe')
+      } else {
+        sessionStorage.removeItem('access')
+        sessionStorage.removeItem('refresh')
+        sessionStorage.removeItem('rememberMe')
+      }
+      state.rememberMe = null
     }
   },
   actions: {
-    obtainToken (state, { email, password }) {
+    obtainToken (state, { email, password, rememberMe }) {
       const payload = {
         email: email,
         password: password
@@ -46,6 +72,7 @@ const store = new Vuex.Store({
 
       return axios.post(this.state.endpoints.obtainJWT, payload)
         .then((response) => {
+          response.data.rememberMe = rememberMe
           this.commit('setToken', response.data)
         })
         .catch((error) => {
