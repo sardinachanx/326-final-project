@@ -20,6 +20,7 @@
         />
       <EnrollCourseForm
         v-if="selectedAssignment == null && selectedCourse == null"
+        :user="user"
         v-on:pull-data="$emit('pull-data', () => {})"
         />
     </section>

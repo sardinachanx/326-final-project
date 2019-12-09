@@ -46,44 +46,81 @@ export default {
       term: new Date().getMonth() < 6 ? 'S' : 'F'
     }
   },
+  props: {
+    user: Object
+  },
   methods: {
     enrollCourse: function () {
       console.log('enrolling ' + this.name + ' for ' + this.term + this.year)
 
-      // TODO: check if course already exists
-
-      // create the course
-      const payload = {
-        name: this.name,
-        course_number: this.number,
-        subject: this.subject,
-        year: this.year,
-        term: this.term
-      }
-
-      axios.post('v1/courses/', payload, {
+      axios.get('v1/courses/', {
         headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
-      })
-        .then((response) => {
-          // enroll in the course
-          let courseId = response.data.id
-          const payload = {
-            course: courseId,
+      }).then((response) => {
+        // if already enrolled in the course, enroll in this one, otherwise create the course
+
+        let courses = response.data
+        let existingCourse = this.getMatchingCourse(this.subject, this.number, courses)
+
+        if (existingCourse === null) {
+          // create the course
+
+          return axios.post('v1/courses/', {
+            name: this.name,
+            course_number: this.number,
+            subject: this.subject,
             year: this.year,
             term: this.term
-          }
-
-          return axios.post('v1/enrollment/', payload, {
+          }, {
             headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
           })
+        } else {
+          return Promise.resolve({
+            data: {
+              id: existingCourse.id
+            }
+          })
+        }
+      }).then((response) => {
+        // check if already enrolled in the course
+        let alreadyEnrolledCourse = this.getMatchingCourse(this.subject, this.number, this.user.courses)
+
+        if (alreadyEnrolledCourse !== null) {
+          return Promise.resolve()
+        }
+
+        // enroll in the course
+        let courseId = response.data.id
+        const payload = {
+          course: courseId,
+          year: this.year,
+          term: this.term
+        }
+
+        return axios.post('v1/enrollment/', payload, {
+          headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
         })
-        .then((response) => {
-          this.$emit('pull-data', () => {})
-        })
-        .catch((error) => {
-          // TODO: actually catch it
-          this.$emit('show-error', error)
-        })
+      }).then((response) => {
+        this.$emit('pull-data', () => {})
+        this.number = null
+        this.subject = ''
+        this.year = new Date().getFullYear()
+        this.term = new Date().getMonth() < 6 ? 'S' : 'F'
+        this.name = ''
+      }).catch((error) => {
+        // TODO: actually catch it
+        this.$emit('show-error', error)
+      })
+    },
+    getMatchingCourse: function (courseSubject, courseNumber, courses) {
+      let courseNames = courses.map((course) => { return course.subject + ' ' + course.course_number })
+      console.log('checking for ' + courseSubject + ' ' + courseNumber + ' in ' + courseNames)
+      for (let course of courses) {
+        if ((course.course_number === courseNumber && course.subject === courseSubject) || (course.course_name !== undefined && course.course_name.startsWith(courseSubject + ' ' + courseNumber))) {
+          return course
+        }
+      }
+
+      return null
     }
   },
   created () {
