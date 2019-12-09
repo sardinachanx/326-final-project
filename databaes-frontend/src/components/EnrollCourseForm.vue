@@ -107,8 +107,7 @@ export default {
         this.term = new Date().getMonth() < 6 ? 'S' : 'F'
         this.name = ''
       }).catch((error) => {
-        // TODO: actually catch it
-        this.$emit('show-error', error)
+        this.$store.dispatch('showError', error)
       })
     },
     getMatchingCourse: function (courseSubject, courseNumber, courses) {

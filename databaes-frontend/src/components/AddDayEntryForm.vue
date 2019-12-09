@@ -35,7 +35,6 @@ export default {
     addDayEntry: function () {
       console.log('adding ' + this.duration + ' for ' + this.date)
 
-      // TODO: add the entry
       const payload = {
         assignment: this.assignmentId,
         date: this.date.toISOString().split('T')[0],
@@ -49,8 +48,7 @@ export default {
           this.$emit('pull-data', () => {})
         })
         .catch((error) => {
-          // TODO: actually catch it
-          this.$emit('show-error', error)
+          this.$store.dispatch('showError', error)
         })
     }
   }

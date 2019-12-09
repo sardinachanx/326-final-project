@@ -6,28 +6,28 @@
         <nav>
           <div class="mainnav" v-if="loggedIn">
             <router-link to="/">Home</router-link> |
-            <router-link to="/homeworkplanner">Homework Planner</router-link> |
-            <router-link to="/courses">Courses</router-link> |
-            <router-link to="/search">Search</router-link> |
+            <router-link to="/courses">My Courses</router-link> |
             <router-link to="/profile">Profile</router-link>
           </div>
           <div class="loginnav">
-            <router-link to="/login" v-if="!loggedIn">Login</router-link> |
-            <router-link to="/register" v-if="!loggedIn">Register</router-link>
+            <div v-if="!loggedIn">
+              <router-link to="/login">Login</router-link> |
+              <router-link to="/register">Register</router-link>
+            </div>
             <a href="" v-on:click.stop.prevent="logout" v-if="loggedIn">Logout</a>
           </div>
         </nav>
       </header>
-      <router-view id="body" v-on:show-error="showError" :user="user" v-on:pull-data="pullData"/>
+      <router-view id="body" :user="user" v-on:pull-data="pullData"/>
     </div>
     <div id="app" v-if="!doneLoading">
       <h1> Loading... </h1>
     </div>
-    <div id="toast" v-if="errorLoading != null">
+    <div id="toast" v-if="$store.state.error != null">
       Oops! Something went wrong.
       <br />
-      <div v-if="errorLoading != null">&#x26a0; {{ errorLoading }}</div>
-      <div v-if="errorLoading == null">&#x26a0; Couldn't connect <br /> to the server </div>
+      <div v-if="$store.state.error != null">&#x26a0; {{ $store.state.error }}</div>
+      <div v-if="$store.state.error == null">&#x26a0; Couldn't connect <br /> to the server </div>
     </div>
   </div>
 </template>
@@ -39,7 +39,6 @@ export default {
   name: 'app',
   data: function () {
     return {
-      errorLoading: null,
       user: null,
       doneLoading: false
     }
@@ -55,10 +54,6 @@ export default {
     }
   },
   methods: {
-    showError: function (error) {
-      console.log('Showing error')
-      this.errorLoading = error
-    },
     logout: function () {
       this.$store.commit('removeToken')
       this.user = null
@@ -68,12 +63,13 @@ export default {
       if (this.loggedIn) {
         axios.get('v1/users/me/', this.config)
           .then((response) => {
+            this.$store.dispatch('showError', null)
             this.user = response.data
             this.doneLoading = true
             callback()
           })
           .catch((error) => {
-            this.errorLoading = error
+            this.$store.dispatch('showError', error)
             this.doneLoading = true
             callback()
           })
@@ -87,7 +83,7 @@ export default {
     this.$store.dispatch('inspectToken').then(() => {
       this.pullData(() => {})
     }).catch((error) => {
-      this.errorLoading = error
+      this.$store.dispatch('showError', error)
       this.doneLoading = true
     })
   }

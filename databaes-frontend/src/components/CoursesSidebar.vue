@@ -3,7 +3,7 @@
     <h3
       :class="{ course_selector: selectedCourseNumber !== -1 }"
       @click="$emit('selectCourse', -1)"
-      > Courses </h3>
+      > My Courses </h3>
     <ul v-if="courses !== undefined && courses !== null">
       <li
         :class="{ selected: selectedCourseNumber === -1 }"

@@ -51,18 +51,17 @@ export default {
           this.assignment = response.data
         })
         .catch((error) => {
-          // TODO: actually show error
-          this.$emit('show-error', error)
+          this.$store.dispatch('showError', error)
         })
+
       axios.get('v1/stats/', {
         headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
       })
         .then((response) => {
-          this.stats = response.data
+          this.stats = response.data.user_stats.course_breakdown[this.selectedCourse.course].assignment_breakdown[this.selectedAssignment.id]
         })
         .catch((error) => {
-          // TODO: actually show error
-          this.$emit('show-error', error)
+          this.$store.dispatch('showError', error)
         })
     },
     timeToHours: function (timeString) {

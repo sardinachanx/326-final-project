@@ -21,11 +21,6 @@ const routes = [
     component: () => import('../views/Courses.vue')
   },
   {
-    path: '/homeworkplanner',
-    name: 'homeworkplanner',
-    component: () => import('../views/HomeworkPlanner.vue')
-  },
-  {
     path: '/login',
     name: 'login',
     component: () => import('../views/Login.vue')

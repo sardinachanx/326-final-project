@@ -64,8 +64,7 @@ export default {
           this.$emit('pull-data', () => {})
         })
         .catch((error) => {
-          // TODO: actually catch it
-          this.$emit('show-error', error)
+          this.$store.dispatch('showError', error)
         })
     }
   },

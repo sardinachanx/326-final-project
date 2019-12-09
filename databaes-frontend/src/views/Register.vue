@@ -71,7 +71,7 @@ export default {
           this.$emit('pull-data', () => { this.$router.push('/profile') })
         })
         .catch((error) => {
-          this.$emit('show-error', error)
+          this.$store.dispatch('showError', error)
         })
     }
   }

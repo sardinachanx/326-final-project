@@ -73,7 +73,7 @@ export default {
           this.$set(this.selectedCourse, 'assignments', response.data.assignments)
         })
         .catch((error) => {
-          this.$emit('show-error', error)
+          this.$store.dispatch('showError', error)
         })
     },
     selectAssignment: function (assignmentId) {

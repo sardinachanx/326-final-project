@@ -18,7 +18,8 @@ const store = new Vuex.Store({
       obtainJWT: 'login/',
       refreshJWT: 'refresh/'
     },
-    rememberMe: localStorage.getItem('rememberMe') || false
+    rememberMe: localStorage.getItem('rememberMe') || false,
+    error: null
   },
   mutations: {
     setToken (state, { access, refresh, rememberMe }) {
@@ -61,6 +62,9 @@ const store = new Vuex.Store({
         sessionStorage.removeItem('rememberMe')
       }
       state.rememberMe = null
+    },
+    setError (state, error) {
+      state.error = error
     }
   },
   actions: {
@@ -78,6 +82,9 @@ const store = new Vuex.Store({
         .catch((error) => {
           console.log(error)
         })
+    },
+    showError (state, error) {
+      this.commit('setError', error)
     },
     refreshToken () {
       const payload = {
