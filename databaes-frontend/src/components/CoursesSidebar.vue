@@ -34,7 +34,7 @@
               selected: assignment.id == selectedAssignmentNumber
             }"
             @click="$emit('selectAssignment', assignment.id)">
-            {{ assignment.type }} {{ assignment.number }}
+            {{ assignmentTypes[assignment.type] }} {{ assignment.number }}
           </li>
         </ul>
       </li>
@@ -52,6 +52,18 @@ export default {
     courses: Array,
     selectedCourseNumber: Number,
     selectedAssignmentNumber: Number
+  },
+  data: function () {
+    return {
+      assignmentTypes: {
+        ES: 'Essay',
+        EX: 'Exam',
+        PJ: 'Project',
+        PR: 'Presentation',
+        PS: 'Problem Set',
+        QZ: 'Quiz'
+      }
+    }
   }
 }
 </script>
