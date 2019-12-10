@@ -5,7 +5,7 @@
       :selectedCourseNumber="selectedCourseNumber"
       @selectCourse="selectCourse" />
     <section class="courseview">
-      <Course
+      <CompareCourse
         v-if="selectedCourse != null"
         :selectedCourse="selectedCourse"
         v-on:pull-data="$emit('pull-data', () => {}); selectCourse(selectedCourseNumber)"
@@ -15,13 +15,13 @@
 </template>
 
 <script>
-import Course from '@/components/Course.vue'
+import CompareCourse from '@/components/CompareCourse.vue'
 import CompareSidebar from '@/components/CompareSidebar.vue'
 
 export default {
   name: 'compare',
   components: {
-    Course,
+    CompareCourse,
     CompareSidebar
   },
   props: {
@@ -43,7 +43,7 @@ export default {
         return null
       }
       for (let course of this.courses) {
-        if (course.course === this.selectedCourseNumber) {
+        if ((course.course || course.id) === this.selectedCourseNumber) {
           return course
         }
       }

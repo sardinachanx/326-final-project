@@ -3,18 +3,12 @@
     <h3
       :class="{ course_selector: selectedCourseNumber !== -1 }"
       @click="$emit('selectCourse', -1)"
-      > My Courses </h3>
+      > All Courses </h3>
     <ul v-if="courses !== undefined && courses !== null">
-      <li
-        :class="{ selected: selectedCourseNumber === -1 }"
-        style="list-style-type: none;"
-        @click="$emit('selectCourse', -1)"
-        > Enroll in more courses </li>
       <li
         v-for="course in courses"
         :key="course.course || course.id"
-        class="assignment"
-        :class="{ selected: course.course == selectedCourseNumber }"
+        :class="{ selected: (course.course || course.id) == selectedCourseNumber }"
         >
         <div
           @click="$emit('selectCourse', course.course || course.id)"
@@ -24,7 +18,7 @@
       </li>
     </ul>
     <p v-if="courses === undefined || courses === null">
-      Not enrolled in any courses!
+      No courses found!
     </p>
   </section>
 </template>
@@ -34,20 +28,7 @@ export default {
   name: 'CompareSidebar',
   props: {
     courses: Array,
-    selectedCourseNumber: Number,
-    selectedAssignmentNumber: Number
-  },
-  data: function () {
-    return {
-      assignmentTypes: {
-        ES: 'Essay',
-        EX: 'Exam',
-        PJ: 'Project',
-        PR: 'Presentation',
-        PS: 'Problem Set',
-        QZ: 'Quiz'
-      }
-    }
+    selectedCourseNumber: Number
   }
 }
 </script>
