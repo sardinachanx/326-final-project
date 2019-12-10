@@ -1,6 +1,6 @@
 <template>
   <div class="courses">
-    <ul>
+    <ul style="margin: auto">
       <li
         v-for="course in courses"
         :key="course.id"
