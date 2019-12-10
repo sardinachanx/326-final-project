@@ -196,7 +196,7 @@ class StatisticsSerializer(serializers.Serializer):
                         'avg_hours': str(avg_hours)
                     }
                 }
-                final_bucket[course['total_hours'] += duration
+                final_bucket[course]['total_hours'] += duration
                 final_bucket[course]['average_hours_per_week'] += avg_hours
             final_bucket[course]['average_hours_per_week'] = str(final_bucket[course]['average_hours_per_week'])
             final_bucket[course]['total_hours'] = str(final_bucket[course]['total_hours'])
