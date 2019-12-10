@@ -6,6 +6,9 @@
     <h3>
       Average hours per week: {{ Math.round(timeToHours(stats.average_hours_per_week) * 10) / 10 }}
     </h3>
+    <h3>
+      Total hours: {{ Math.round(timeToHours(stats.total_hours) * 10) / 10 }}
+    </h3>
     <AddAssignmentForm :courseId="selectedCourse.id" v-on:pull-data="$emit('pull-data', () => {})"/>
   </div>
 </template>
