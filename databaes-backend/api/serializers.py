@@ -186,7 +186,7 @@ class StatisticsSerializer(serializers.Serializer):
         print(draft)
         final_bucket = {} 
         for (course, info) in bucket.items(): 
-            final_bucket[course] = {'average_hours_per_week': timedelta(0), 'total_hours': timedelta(0), assignment_breakdown': {}}
+            final_bucket[course] = {'average_hours_per_week': timedelta(0), 'total_hours': timedelta(0), 'assignment_breakdown': {}}
             for (assignment, duration) in info.items(): 
                 avg_hours = duration / ((draft[course][assignment]['max'] - draft[course][assignment]['min'] + \
                             timedelta(days=1)).days / 7)
