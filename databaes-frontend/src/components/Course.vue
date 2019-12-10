@@ -1,13 +1,14 @@
 <template>
   <div class="course">
     <h1>
-      {{ selectedCourse.course_name }}
+      {{ selectedCourse.subject }} {{ selectedCourse.course_number }} {{ selectedCourse.name }}
     </h1>
-    <AddAssignmentForm :courseId="selectedCourse.course" v-on:pull-data="$emit('pull-data', () => {})"/>
+    <AddAssignmentForm :courseId="selectedCourse.id" v-on:pull-data="$emit('pull-data', () => {})"/>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import AddAssignmentForm from '@/components/AddAssignmentForm.vue'
 
 export default {
@@ -17,6 +18,32 @@ export default {
   },
   components: {
     AddAssignmentForm
+  },
+  data: function () {
+    return {
+      stats: null
+    }
+  },
+  methods: {
+    getStats: function () {
+      axios.get('v1/stats/', {
+        headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
+      })
+        .then((response) => {
+          this.stats = response.data.user_stats.course_breakdown[this.selectedCourse.course]
+        })
+        .catch((error) => {
+          this.$store.dispatch('showError', error)
+        })
+    }
+  },
+  watch: {
+    selectedCourse: function () {
+      this.getStats()
+    }
+  },
+  mounted: function () {
+    this.getStats()
   }
 }
 </script>

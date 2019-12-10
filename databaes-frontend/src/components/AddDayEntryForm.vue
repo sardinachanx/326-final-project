@@ -10,7 +10,7 @@
       </div>
       <div>
         <label for="duration">Number of hours</label>
-        <input name="duration" type="number" v-model="duration">
+        <input name="duration" type="number" v-model="duration" step="0.01">
       </div>
     </fieldset>
     <button v-on:click="addDayEntry" type="button"> Add Entry </button>

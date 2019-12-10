@@ -5,9 +5,11 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import jwtDecode from 'jwt-decode'
 import Vuex from 'vuex'
+import Chart from 'v-chart-plugin'
 
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)
+Vue.use(Chart)
 Vue.axios.defaults.baseURL = 'http://localhost:8000/api/'
 
 const store = new Vuex.Store({

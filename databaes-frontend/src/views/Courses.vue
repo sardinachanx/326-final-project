@@ -4,14 +4,13 @@
       :courses="user.courses"
       :selectedAssignmentNumber="selectedAssignmentNumber"
       :selectedCourseNumber="selectedCourseNumber"
-      @selectCourse="selectCourse"
-      @selectAssignment="selectAssignment"/>
+      @selectCourse="selectCourse" />
     <section class="courseview">
       <Assignment
         v-if="selectedAssignment != null"
         :selectedAssignment="selectedAssignment"
         :selectedCourse="selectedCourse"
-        v-on:pull-data="$emit('pull-data', () => {}); selectCourse(selectedCourseNumber, selectedAssignmentNumber)"
+        v-on:pull-data="$emit('pull-data', () => {}); "
         />
       <Course
         v-if="selectedAssignment == null && selectedCourse != null"
@@ -28,8 +27,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 import Assignment from '@/components/Assignment.vue'
 import Course from '@/components/Course.vue'
 import CoursesSidebar from '@/components/CoursesSidebar.vue'
@@ -44,7 +41,8 @@ export default {
     EnrollCourseForm
   },
   props: {
-    user: Object
+    user: Object,
+    specificCourses: Array
   },
   data: function () {
     return {
@@ -57,43 +55,34 @@ export default {
       if (assignmentId === undefined || assignmentId === null) {
         assignmentId = -1
       }
+
       if (courseId === -1) {
         this.selectedCourseNumber = -1
         this.selectedAssignmentNumber = -1
         return
       }
 
-      axios.get('v1/courses/' + courseId + '/', {
-        headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
-      })
-        .then((response) => {
-          this.selectedCourseNumber = courseId
-          this.selectedAssignmentNumber = assignmentId
-
-          this.$set(this.selectedCourse, 'assignments', response.data.assignments)
-        })
-        .catch((error) => {
-          this.$store.dispatch('showError', error)
-        })
-    },
-    selectAssignment: function (assignmentId) {
+      this.selectedCourseNumber = courseId
       this.selectedAssignmentNumber = assignmentId
     }
   },
   computed: {
     selectedCourse: function () {
+      console.log('updating selected course')
       if (this.user.courses === undefined || this.user.courses.length === 0 || this.selectedCourseNumber === -1) {
         return null
       }
       for (let course of this.user.courses) {
-        if (course.course === this.selectedCourseNumber) {
+        if (course.id === this.selectedCourseNumber) {
           return course
         }
       }
       return null
     },
     selectedAssignment: function () {
+      console.log('Updating assignment with ' + this.selectedAssignmentNumber)
       if (this.selectedCourse === null || this.selectedCourse.assignments === undefined || this.selectedCourse.assignments.length === 0 || this.selectedAssignmentNumber === -1) {
+        console.log('selectedCourse.assignments is undefined')
         return null
       }
 

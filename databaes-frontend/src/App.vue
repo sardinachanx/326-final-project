@@ -2,7 +2,7 @@
   <div>
     <div id="app" v-if="doneLoading">
       <header>
-        <a style="display: inline; margin: 0; color: inherit" href="/">Databaes</a>
+        <a style="display: inline; margin: 0; color: #f5f5f5" href="/">Databaes</a>
         <nav>
           <div class="mainnav" v-if="loggedIn">
             <router-link to="/">Home</router-link> |
@@ -12,10 +12,10 @@
           </div>
           <div class="mainnav" v-if="!loggedIn">
             <router-link to="/">Home</router-link> |
-            <router-link to="/compare">Compare</router-link> |
+            <router-link to="/compare">Compare</router-link>
           </div>
           <div class="loginnav">
-            <div v-if="!loggedIn">
+            <div v-if="!loggedIn" style="display: inline">
               <router-link to="/login">Login</router-link> |
               <router-link to="/register">Register</router-link>
             </div>
@@ -23,7 +23,7 @@
           </div>
         </nav>
       </header>
-      <router-view id="body" :user="user" :courses="courses" v-on:pull-data="pullData"/>
+      <router-view id="body" :user="user" :courses="courses" :specificCourses="specificCourses" v-on:pull-data="pullData"/>
     </div>
     <div id="app" v-if="!doneLoading">
       <h1> Loading... </h1>
@@ -46,7 +46,8 @@ export default {
     return {
       user: null,
       doneLoading: false,
-      courses: null
+      courses: null,
+      specificCourses: null
     }
   },
   computed: {
@@ -68,14 +69,25 @@ export default {
     pullData: function (callback) {
       if (this.loggedIn) {
         let user = axios.get('v1/users/me/', this.config)
+        let specificCourses = user.then((response) => {
+          return response.data.courses.map((course) => {
+            return axios.get('v1/courses/' + course.course + '/', this.config)
+          })
+        })
         let courses = axios.get('v1/courses/', this.config)
-        Promise.all([user, courses])
+        Promise.all([user, courses, specificCourses])
           .then((response) => {
-            this.$store.dispatch('showError', null)
-            this.user = response[0].data
-            this.courses = response[1].data
-            this.doneLoading = true
-            callback()
+            Promise.all(response[2]).then((responses) => {
+              this.$store.dispatch('showError', null)
+              this.user = response[0].data
+              this.courses = response[1].data
+              this.user.courses = responses.map((response) => {
+                return response.data
+              })
+
+              this.doneLoading = true
+              callback()
+            })
           })
           .catch((error) => {
             this.$store.dispatch('showError', error)
@@ -137,8 +149,9 @@ header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: #f5f5f5;
+  background-color: #038288;
   width: stretch;
+  font-size: larger;
 }
 
 #filler {
@@ -164,11 +177,11 @@ nav {
 
 nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #d3d3d3;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #f5f5f5;
 }
 
 #sidebar {
@@ -192,5 +205,6 @@ nav a.router-link-exact-active {
 #body {
   height: stretch;
   margin: auto;
+  font-size: larger;
 }
 </style>

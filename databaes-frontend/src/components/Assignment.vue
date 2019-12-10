@@ -1,21 +1,22 @@
 <template>
   <div class="assignment">
     <h1>
-      {{ selectedCourse.course_name }} - {{ selectedAssignment.type }} {{ selectedAssignment.number }}
+      {{ selectedCourse.subject }} {{ selectedCourse.course_number }} {{ selectedCourse.name }} - {{ assignmentTypes[selectedAssignment.type] }} {{ selectedAssignment.number }}
     </h1>
-    <div v-if="assignment !== null">
+    <h2> {{ selectedAssignment.assigned_date }} - {{ selectedAssignment.due_date }} </h2>
+    <div v-if="assignment !== null" class="innerView">
       <div class="timeDisplay">
-        <h3> Total time spent: <strong>{{ Math.round(timeToHours(assignment.avg_total_hours)*10)/10 }}</strong> hours </h3>
-        <h3>
-          Average time spent per day:
-          <strong>{{ Math.round(Object.values(assignment.avg_daily_hours).reduce((a, b) => timeToHours(a) + timeToHours(b), 0) / Object.values(assignment.avg_daily_hours).length * 10) / 10 }}</strong>
-          hours
-        </h3>
+        <div class="times">
+          <h3> Total time: <strong>{{ totalTimeSpent }}</strong> hours </h3>
+          <h3>
+            Average time per day:
+            <strong>{{ averageTimePerDay }}</strong>
+            hours
+          </h3>
+        </div>
+        <v-chart v-bind:chartData="chartData" class="graph" v-if="totalTimeSpent !== 0"></v-chart>
       </div>
-      <div class="graph">
-        Graph will go here
-      </div>
-      <AddDayEntryForm :assignmentId="this.assignment.id"  v-on:pull-data="$emit('pull-data', () => {})"/>
+      <AddDayEntryForm :assignmentId="this.assignment.id"  v-on:pull-data="$emit('pull-data', () => {})" class="form"/>
     </div>
     <div v-if="assignment === null">
       <h3> Loading... </h3>
@@ -36,11 +37,50 @@ export default {
   data: function () {
     return {
       assignment: null,
-      stats: null
+      stats: null,
+      assignmentTypes: {
+        ES: 'Essay',
+        EX: 'Exam',
+        PJ: 'Project',
+        PR: 'Presentation',
+        PS: 'Problem Set',
+        QZ: 'Quiz'
+      }
     }
   },
   components: {
     AddDayEntryForm
+  },
+  computed: {
+    chartData: function () {
+      let data = Object.entries(this.assignment.avg_daily_hours)
+      data = data.filter(([date, time]) => {
+        return new Date(date) <= Date.now()
+      })
+      data = data.map(([date, time]) => {
+        return { date: date.substring(5).replace('-', '/'), time: this.timeToHours(time) }
+      })
+
+      console.log(data)
+
+      return {
+        chartType: 'vBarChart',
+        selector: 'vBarChart',
+        title: 'Hours per Day',
+        width: 400,
+        height: 200,
+        metric: ['time'],
+        dim: 'date',
+        label: false,
+        data: data
+      }
+    },
+    averageTimePerDay: function () {
+      return Math.round(Object.values(this.assignment.avg_daily_hours).reduce((a, b) => this.timeToHours(a) + this.timeToHours(b), 0) / Object.values(this.assignment.avg_daily_hours).length * 10) / 10
+    },
+    totalTimeSpent: function () {
+      return Math.round(this.timeToHours(this.assignment.avg_total_hours) * 10) / 10
+    }
   },
   methods: {
     loadAssignment: function () {
@@ -58,6 +98,11 @@ export default {
         headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
       })
         .then((response) => {
+          let courseInfo = response.data.user_stats.course_breakdown[this.selectedCourse.course]
+          if (courseInfo === undefined) {
+            this.stats = undefined
+            return
+          }
           this.stats = response.data.user_stats.course_breakdown[this.selectedCourse.course].assignment_breakdown[this.selectedAssignment.id]
         })
         .catch((error) => {
@@ -74,10 +119,8 @@ export default {
       if (timeString === '0.0') {
         return 0
       }
-      console.log(timeString)
       let pattern = /(?:(\d+) days?, )?(\d+):(\d+):(\d+)/
       let groups = timeString.match(pattern)
-      console.log(groups)
       let time = 0
       time += groups[1] === undefined ? 0 : parseInt(groups[1]) * 24 // optional days
       time += parseInt(groups[2]) // hours
@@ -97,27 +140,33 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .classview {
   width: 1000px;
   margin: auto;
   padding-left: 20px;
 }
 
+.innerView {
+  text-align: center;
+}
+
 .timeDisplay {
+  margin: auto;
   display: flex;
   justify-content: space-between;
 }
 
-.timeDisplay > h3 {
+.times > h3 {
   text-align: center;
 }
 
-.timeDisplay > h3 > strong {
+.times > h3 > strong {
   position: relative;
   top: 0.25em;
   font-size: 3em;
   text-align: center;
+  color: #038288;
 }
 
 @media only screen and (min-width: 1001px) {
@@ -125,7 +174,7 @@ export default {
     flex-direction: row;
   }
 
-  .timeDisplay > h3 {
+  .times > h3 {
     margin-left: 20px;
     margin-right: 20px;
   }
@@ -136,7 +185,7 @@ export default {
     flex-direction: column;
   }
 
-  .timeDisplay > h3 {
+  .times > h3 {
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 10px;
@@ -145,13 +194,23 @@ export default {
 }
 
 .graph {
-  max-width: 540px;
-  height: 240px;
-  background-color: gray;
-  color: #FFFFFF;
-  padding: 30px;
-  font-size: 2em;
-  margin: auto;
+  margin: 0 auto;
+}
+
+.form {
   margin-bottom: 30px;
+}
+
+svg :nth-child(2) > g > text {
+  transform: rotate(65deg) translateX(15pt) translateY(-6pt)
+}
+
+svg {
+  transform: scale(1.4);
+  padding: 30px;
+}
+
+rect {
+  fill: #038288;
 }
 </style>
