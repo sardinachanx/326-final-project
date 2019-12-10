@@ -1,53 +1,48 @@
 <template>
-  <div class="courses body-with-sidebar">
-    <CompareSidebar
-      :courses="courses"
-      :selectedCourseNumber="selectedCourseNumber"
-      @selectCourse="selectCourse" />
-    <section class="courseview">
-      <CompareCourse
-        v-if="selectedCourse != null"
-        :selectedCourse="selectedCourse"
-        v-on:pull-data="$emit('pull-data', () => {}); selectCourse(selectedCourseNumber)"
-        />
-    </section>
+  <div class="courses">
+    <ul>
+      <li
+        v-for="course in courses"
+        :key="course.id"
+        >
+        <h1>
+          {{ course.subject }} {{ course.course_number }} - {{ course.name }}
+        </h1>
+        <h3>
+          Weekly hours: {{ Math.round(timeToHours(course.average_weekly_hours)*10)/10 }}
+        </h3>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-import CompareCourse from '@/components/CompareCourse.vue'
-import CompareSidebar from '@/components/CompareSidebar.vue'
-
 export default {
   name: 'compare',
-  components: {
-    CompareCourse,
-    CompareSidebar
-  },
   props: {
     courses: Array
   },
-  data: function () {
-    return {
-      selectedCourseNumber: -1
-    }
-  },
   methods: {
-    selectCourse: function (courseId) {
-      this.selectedCourseNumber = courseId
-    }
-  },
-  computed: {
-    selectedCourse: function () {
-      if (this.courses === undefined || this.courses.length === 0 || this.selectedCourseNumber === -1) {
+    timeToHours: function (timeString) {
+      if (timeString === null || timeString === undefined) {
         return null
       }
-      for (let course of this.courses) {
-        if ((course.course || course.id) === this.selectedCourseNumber) {
-          return course
-        }
+      if (Number.isFinite(timeString)) {
+        return timeString
       }
-      return null
+      if (timeString === '0.0') {
+        return 0
+      }
+      console.log(timeString)
+      let pattern = /(?:(\d+) days?, )?(\d+):(\d+):(\d+)/
+      let groups = timeString.match(pattern)
+      console.log(groups)
+      let time = 0
+      time += groups[1] === undefined ? 0 : parseInt(groups[1]) * 24 // optional days
+      time += parseInt(groups[2]) // hours
+      time += parseInt(groups[3]) / 60 // minutes
+      time += parseInt(groups[4]) / (60 * 60) // seconds
+      return time
     }
   }
 }
@@ -64,5 +59,9 @@ export default {
   margin-left: auto;
   margin-right: auto;
   padding-left: 20px;
+}
+
+li {
+  list-style-type: none;
 }
 </style>
