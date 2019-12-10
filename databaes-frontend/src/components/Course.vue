@@ -3,6 +3,9 @@
     <h1>
       {{ selectedCourse.subject }} {{ selectedCourse.course_number }} {{ selectedCourse.name }}
     </h1>
+    <h3>
+      Average hours per week: {{ Math.round(timeToHours(stats.average_hours_per_week) * 10) / 10 }}
+    </h3>
     <AddAssignmentForm :courseId="selectedCourse.id" v-on:pull-data="$emit('pull-data', () => {})"/>
   </div>
 </template>
@@ -30,11 +33,30 @@ export default {
         headers: { 'Authorization': 'Bearer ' + this.$store.state.access }
       })
         .then((response) => {
-          this.stats = response.data.user_stats.course_breakdown[this.selectedCourse.course]
+          this.stats = response.data.user_stats.course_breakdown[this.selectedCourse.id]
         })
         .catch((error) => {
           this.$store.dispatch('showError', error)
         })
+    },
+    timeToHours: function (timeString) {
+      if (timeString === null || timeString === undefined) {
+        return null
+      }
+      if (Number.isFinite(timeString)) {
+        return timeString
+      }
+      if (timeString === '0.0') {
+        return 0
+      }
+      let pattern = /(?:(\d+) days?, )?(\d+):(\d+):(\d+)/
+      let groups = timeString.match(pattern)
+      let time = 0
+      time += groups[1] === undefined ? 0 : parseInt(groups[1]) * 24 // optional days
+      time += parseInt(groups[2]) // hours
+      time += parseInt(groups[3]) / 60 // minutes
+      time += parseInt(groups[4]) / (60 * 60) // seconds
+      return time
     }
   },
   watch: {
